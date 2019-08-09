@@ -22,19 +22,28 @@ set(MKL_LIBRARIES ${MKL_ROOT}/lib/intel64/)
 As local machine, you need to define the path to library in CMakeLists.txt in MatRox/sympiler/ and MatRox/matroxTest-V1/ for MatRox compilation and Testing MatRox-generated code.
 
 
-### Building Sympiler
+### Building MatRox
 ```bash
-cd where/you/cloned/Sympiler
+cd where/you/cloned/MatRox
 mkdir build
 cd build
 cmake ..
 cd sympiler
 make
 ```
+### Scripts
+copy scripts to MatRox_RU/build/sympiler/ to run the tests
+You should go to MatRox_RU/build/sympiler/ to run the scripts
 
 ### Testing MatRox-generated code
 The first step is to set the environmental variables corresponding
 to each library. The following shows how the variables are set in bash.
+
+On comet, use the following commands to load intel compiler
+```bash
+export MODULEPATH=/share/apps/compute/modulefiles:$MODULEPATH
+module load intel/2018.1.163
+```
 
 ```bash
 set(CMAKE_CXX_COMPILER /share/apps/compute/intel/intelmpi2018/compilers_and_libraries/linux/bin/intel64/icpc)
@@ -48,8 +57,12 @@ After setting the library paths:
 This will build the two remaining parts of the project including
 Sympiler tests for both Cholesky and Triangular solve.
 
-### Matrix dataset
-We put the points we used in MatRox_RU/data folder.
+### dataset
+
+[Link to obtain Points](https://www.dropbox.com/sh/ab7f8gut3nh22ym/AAA0QXrC3kS0L4iHS2T0kpg-a?dl=0), Select all and
+download the points
+Please put the points we used in MatRox_RU/data folder.
+Since some of used dataset is too large for local machine, we also provide 5 small datasets, which can be executed locally.
 
 ### Evaluating MatRox
 After build is done successfully, the following commands can be used
@@ -58,16 +71,16 @@ to evaluate MatRox and MatRox-generated code by running the following scripts:
 #### Show the performance and accuracy
 ```bash
 cd build/sympiler/
-#HSS on comet
+#HSS on comet: example command 1
 sbatch testMatRox 0  
-#HSS local
+#HSS local: example command 2
 bash testMatRox 0
-#H2-b on comet
+#H2-b on comet: example command 3
 sbatch testMatRox 0.03
-#H2-b local
+#H2-b local: example command 4
 bash testMatRox 0.03
 ```
-The result cound be found in \*.csv
+The result could be found in res.csv
 
 There are 6 columns:
 1. tree&interaction&sample: time in tree construction, compute interaction and sampling
@@ -79,22 +92,23 @@ There are 6 columns:
 
 Compression time = item 1 + item 4
 
-
-#### Show the input accuracy vs overall accuracy
+#### Show the input accuracy vs overall accuracy (Figure 9)
 ```bash
 cd build/sympiler/
 #=
-#HSS on comet
+#HSS on comet: example command 1
 sbatch accsh 0  
-#HSS local
+#HSS local: example command 2
 bash accsh 0
-#H2-b on comet
+#H2-b on comet: example command 3
 sbatch accsh 0.03
-#H2-b local
+#H2-b local: example command 4
 bash accsh 0.03
 ```
+The result could be found in acc.csv, in which each row has 5 items show the overall accuracies related to 1e-1,1e-2,1e-3,1e-4 and 1e-5 for one dataset.
 
-#### Show the scalability result
+
+#### Show the scalability result (Figure 7)
 ```bash
 #=
 #HSS on comet
@@ -107,7 +121,7 @@ sbatch accsh 0.03
 bash accsh 0.03
 
 ```
-
+The result could be found in scal.csv, in which each row has 12 items show the performance of evaluation code related to 1-12 threads.
 
 
 ## Source Tree Description
@@ -116,12 +130,12 @@ bash accsh 0.03
 The scripts to download the matrices used in the paper.
 
 ### symGen
-The Sympiler-generated code is stored here by default and is used for testing
-Sympiler in symTest folder.
+The MatRox-generated code is stored here by default and is used for testing
+Sympiler in matroxTest-V1 folder.
 
 ### sympiler
-This folder contains the source of Sympiler. Running this code generates code
-for a specific sparsity.
+This folder contains the source of MatRox based on sympiler code. Running this code generates code
+for a specific structure.
 
-### symTest
-This folder tests the Sympiler-generated code for a given matrix.
+### matroxTest-V1
+This folder tests the MatRox-generated code for a given structure, in which low-rank approximation is performed at run-time.
