@@ -56,8 +56,9 @@ set(MKL_LIBRARIES ${MKL_ROOT}/lib/intel64/)
 ### dataset
 
 [Link to obtain Points](https://www.dropbox.com/sh/ab7f8gut3nh22ym/AAA0QXrC3kS0L4iHS2T0kpg-a?dl=0), Select all and
-download the points
-Please put the points we used in MatRox_RU/data folder.
+download the dataset in folder named points
+Please put the dataset directly to MatRox_RU/data folder.You can check the 
+scripts to make sure you put the dataset into correct directories. 
 Since some of used dataset is too large for local machine, we also provide 5 small datasets, which can be executed locally.
 
 ### Evaluating MatRox
