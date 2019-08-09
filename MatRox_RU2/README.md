@@ -8,7 +8,7 @@ MatRox does need external library (MKL) for building and testing the
 MatRox-generated code, Intel MKL libraries are required.
 
 
-###Setup
+### Setup
 Modify the CMakeLists.txt in MatRox_RU/sympiler/ and MatRox_RU/matroxTest-V1/ to Modify the path to MKL library and OPENMP.
 
 Take Comet as an example for setting the path.
@@ -51,11 +51,7 @@ set(OMP /share/apps/compute/intel/intelmpi2018/compilers_and_libraries/linux/lib
 
 set(MKL_INCLUDE_DIRS ${MKL_ROOT}/include/)
 set(MKL_LIBRARIES ${MKL_ROOT}/lib/intel64/)
-After setting the library paths:
-
 ```
-This will build the two remaining parts of the project including
-Sympiler tests for both Cholesky and Triangular solve.
 
 ### dataset
 
