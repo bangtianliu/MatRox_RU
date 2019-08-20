@@ -1,1 +1,0 @@
-/share/apps/compute/intel/intelmpi2018/compilers_and_libraries/linux/bin/intel64/icpc  -DMYBLAS -std=gnu++11  -rdynamic CMakeFiles/SymTriang.dir/main.cpp.o  -o SymTriang 
