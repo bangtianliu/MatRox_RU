@@ -32,8 +32,7 @@ cd sympiler
 make
 ```
 ### Scripts
-copy scripts to MatRox_RU/build/sympiler/ to run the tests
-You should go to MatRox_RU/build/sympiler/ to run the scripts
+Please copy all scripts in this folder to MatRox_RU/build/sympiler/ to run the tests. You should go to MatRox_RU/build/sympiler/ to run the scripts
 
 ### Testing MatRox-generated code
 The first step is to set the environmental variables corresponding
@@ -57,8 +56,8 @@ set(MKL_LIBRARIES ${MKL_ROOT}/lib/intel64/)
 
 [Link to obtain Points](https://www.dropbox.com/sh/ab7f8gut3nh22ym/AAA0QXrC3kS0L4iHS2T0kpg-a?dl=0), Select all and
 download the dataset in folder named points
-Please put the dataset directly to MatRox_RU/data folder.You can check the 
-scripts to make sure you put the dataset into correct directories. 
+Please put the dataset directly to MatRox_RU/data folder.You can check the
+scripts to make sure you put the dataset into correct directories.
 Since some of used dataset is too large for local machine, we also provide 5 small datasets, which can be executed locally.
 
 ### Evaluating MatRox
@@ -84,10 +83,21 @@ There are 6 columns:
 2. cogen: code generation time
 3. sa: structure analysis
 4. approximation: low-rank approximation
-5. evaluation
-6. acc
+5. evaluation: the time for evaluation code
+6. acc: overal accuracy
 
 Compression time = item 1 + item 4
+
+#### Show the result for multiple right hand sides (Figure 4)
+
+```bash
+#HSS on comet
+sbatch nrshssh  0.0
+#H2-b on comet
+sbatch nrshssh 0.03
+```
+The results could be found in rhs1.csv, rhs1k.csv, rhs2k.csv and rhs4k.csv for W with 1, 1K, 2K and 4K columns.
+The first column is compression time, second column is code generation time, third column is structure analysis time, last column is the evaluation time.
 
 #### Show the input accuracy vs overall accuracy (Figure 9)
 ```bash
@@ -109,22 +119,30 @@ The result could be found in acc.csv, in which each row has 5 items show the ove
 ```bash
 #=
 #HSS on comet
-sbatch accsh 0  
+sbatch testScal 0  
 #HSS local
-bash accsh 0
+bash testScal 0
 #H2-b on comet
-sbatch accsh 0.03
+sbatch testScal 0.03
 #H2-b local
-bash accsh 0.03
+bash testScal 0.03
 
 ```
 The result could be found in scal.csv, in which each row has 12 items show the performance of evaluation code related to 1-12 threads.
 
+#### Show the results for multiple runs (Figure 10)
+```bash
+#HSS on comet
+sbatch nrunsh 0.0
+#H2-b
+sbatch nrunsh 0.03
+```
+The result could be found in nrun.csv
 
 ## Source Tree Description
 
 ### scripts
-The scripts to download the matrices used in the paper.
+The scripts to run the code, and should be copied to build/sympiler/ folder.
 
 ### symGen
 The MatRox-generated code is stored here by default and is used for testing
