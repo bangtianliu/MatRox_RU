@@ -92,9 +92,9 @@ Compression time = item 1 + item 4
 
 ```bash
 #HSS on comet
-sbatch nrshssh  0.0
+sbatch nrhssh  0.0
 #H2-b on comet
-sbatch nrshssh 0.03
+sbatch nrhssh 0.03
 ```
 The results could be found in rhs1.csv, rhs1k.csv, rhs2k.csv and rhs4k.csv for W with 1, 1K, 2K and 4K columns.
 The first column is compression time, second column is code generation time, third column is structure analysis time, last column is the evaluation time.
