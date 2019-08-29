@@ -34,8 +34,8 @@ rm comtest.csv
 rm runtest.csv
 executable=./sympiler_proj
   i=0
-  echo "tree&intraction&sample, cogen" > comtest.csv 
-  echo "sa, compression, evaluation,acc" > runtest.csv
+  #echo "tree&intraction&sample, cogen" > comtest.csv 
+  #echo "sa, compression, evaluation,acc" > runtest.csv
   for filename in "${filearray[@]}"
 
   do
@@ -74,5 +74,7 @@ executable=./sympiler_proj
   done
   mv ../matroxTest-V1/runtest.csv ./
   
-  awk -F "\"*,\"*" '{print $4}' runtest.csv | xargs -n5 -d'\n' > acc.csv
-
+  awk -F "\"*,\"*" '{print $4}' runtest.csv | xargs -n5 -d'\n' > acc1.csv
+  bash datash
+  paste data.csv acc1.csv > acc.csv
+  rm acc1.csv

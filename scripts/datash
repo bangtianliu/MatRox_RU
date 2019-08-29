@@ -1,0 +1,24 @@
+#!/bin/bash
+
+declare -a filearray=(
+" "
+"covtype"
+"higgs"
+"mnist"
+"susy"
+"letter"
+"pen"
+"hepmass"
+"gas"
+"grid"
+"random"
+"dino"
+"sunflower"
+"unit"
+)
+
+rm data.csv
+for filename in "${filearray[@]}"
+do
+  echo "$filename," >> data.csv
+done

@@ -73,7 +73,18 @@ executable=./sympiler_proj
   mv ../matroxTest-V1/runtest.csv ./
   awk -F "," '{print $1,$2,$3}' runtest.csv | xargs -n4 -d'\n' > runtest1.csv
   paste comtest.csv runtest1.csv > nrhs.csv
-  awk -F ",| " '{$15=$1+$4};{print $15,$3,$2,$5}' OFS=, nrhs.csv > rhs1.csv
-  awk -F ",| " '{$15=$1+$7};{print $15,$6,$2,$8}' OFS=, nrhs.csv > rhs1k.csv
-  awk -F ",| " '{$15=$1+$10};{print $15,$9,$2,$11}' OFS=, nrhs.csv > rhs2k.csv
-  awk -F ",| " '{$15=$1+$13};{print $15,$12,$2,$14}' OFS=, nrhs.csv > rhs4k.csv
+  awk -F ",| " '{$15=$1+$4};{print $15,$3,$2,$5}' OFS=, nrhs.csv > trhs1.csv
+  awk -F ",| " '{$15=$1+$7};{print $15,$6,$2,$8}' OFS=, nrhs.csv > trhs1k.csv
+  awk -F ",| " '{$15=$1+$10};{print $15,$9,$2,$11}' OFS=, nrhs.csv > trhs2k.csv
+  awk -F ",| " '{$15=$1+$13};{print $15,$12,$2,$14}' OFS=, nrhs.csv > trhs4k.csv
+
+  bash datash1
+  paste data.csv trhs1.csv > rhs1.csv
+  paste data.csv trhs1k.csv > rhs1k.csv
+  paste data.csv trhs2k.csv > rhs2k.csv
+  paste data.csv trhs4k.csv > rhs4k.csv
+
+  rm trhs1.csv
+  rm trhs1k.csv
+  rm trhs2k.csv
+  rm trhs4k.csv

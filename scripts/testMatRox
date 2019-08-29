@@ -34,7 +34,7 @@ rm comtest.csv
 rm runtest.csv
 executable=./sympiler_proj
   i=0
-  echo "tree&intraction&sample, cogen" > comtest.csv 
+  echo "tree&intraction&sample, cogen" > comtest.csv
   echo "sa, approximation, evaluation,acc" > ../matroxTest-V1/runtest.csv
   for filename in "${filearray[@]}"
 
@@ -45,9 +45,9 @@ executable=./sympiler_proj
 
    export OMP_NUM_THREADS=12;
   #budget=0.03
-  budget=${1} 
+  budget=${1}
   echo "#filename=$filename"
-   
+
   #for j in {1..3}
   #do
    rm *.bin | $executable $filename $n $d $budget | tee -a comtest.csv
@@ -73,4 +73,7 @@ executable=./sympiler_proj
    let i++
   done
   mv ../matroxTest-V1/runtest.csv ./
-  paste comtest.csv runtest.csv > res.csv
+  paste comtest.csv runtest.csv > res1.csv
+  bash datash
+  paste data.csv res1.csv > res.csv
+  rm res1.csv
