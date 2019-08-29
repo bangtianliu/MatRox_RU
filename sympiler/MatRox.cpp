@@ -11,7 +11,6 @@
 using namespace Sympiler::Internal;
 using namespace Sympiler;
 
-
 //entry to MatRox framework
 int main(int argc, char *argv[])
 {

@@ -139,7 +139,11 @@ for (int i = 0; i < 64; i++)
    } // for k
   } // for j
  } // for i
+<<<<<<< Updated upstream
  for (int i = 0; i < 7; i++)
+=======
+ for (int i = 0; i < 3; i++)
+>>>>>>> Stashed changes
  {
   int32_t _2 = i + 1;
     #pragma omp parallel for
@@ -179,6 +183,7 @@ for (int k = clevelset[i]; k < clevelset[_2]; k++)
  #pragma omp parallel for
 for (int i = 0; i < 64; i++)
  {
+<<<<<<< Updated upstream
   int32_t _8 = i + 1;
   for (int j = fblockSet[i]; j < fblockSet[_8]; j++)
   {
@@ -196,6 +201,24 @@ for (int i = 0; i < 64; i++)
  int32_t _10 = 0 - 1;
  int32_t _11 = 7 - 1;
  for (int i = _11; i > _10; i--)
+=======
+  uint32_t _8 = (uint32_t)(1);
+  int32_t _9 = i - _8;
+  int32_t _10 = i + _8;
+  int32_t _11 = i & 1;
+  uint32_t _12 = (uint32_t)(0);
+  bool _13 = _11 == _12;
+  int32_t _14 = (int32_t)(_13 ? _9 : _10);
+  cblas_dgemm(CblasColMajor, CblasNoTrans, CblasNoTrans, 
+  slen[i],nrhs,slen[_14],
+  _8, &B[Bptr[_9]], 
+  slen[i], &wskel[wskeloffset[_14]], slen[_14], _12, 
+  &uskel[uskeloffset[i]], slen[i]);
+ } // for i
+ int32_t _15 = 0 - 1;
+ int32_t _16 = 3 - 1;
+ for (int i = _16; i > _15; i--)
+>>>>>>> Stashed changes
  {
   int32_t _12 = i + 1;
     #pragma omp parallel for

@@ -89,11 +89,11 @@ namespace Sympiler {
 		void HGEMMInspector::CoarsenLevelSetDetection() {
 			auto tree=htree->tree;
 			if(isPerfect(tree)){
-				tree->parlevel(1,1);
+				tree->parlevel(2,2);
 				tree->genpostw();
 			}
 			else{
-				tree->parlevel(1,1);
+				tree->parlevel(2,2);
 				tree->imgenpostw();
 			}
 

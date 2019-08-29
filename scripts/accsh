@@ -75,6 +75,6 @@ executable=./sympiler_proj
   mv ../matroxTest-V1/runtest.csv ./
   
   awk -F "\"*,\"*" '{print $4}' runtest.csv | xargs -n5 -d'\n' > acc1.csv
-  bash datash
+  bash datash1
   paste data.csv acc1.csv > acc.csv
   rm acc1.csv
