@@ -1,0 +1,29 @@
+#!/bin/bash
+#SBATCH -A ucb191
+#SBATCH --job-name="SC_code"
+#SBATCH --output="ml.%j.%N.out"
+#SBATCH --partition=compute
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=24
+#SBATCH --mem=120G
+#SBATCH --export=ALL
+#SBATCH -t 10:00:00
+
+
+bash testMatRox 0.0
+bash nrhsssh 0.0
+bash accsh 0.0
+bash testScal 0.0
+bash nrunsh 0.0
+
+mkdir HSS
+mv *.csv ./HSS/
+
+bash testMatRox 0.03
+bash nrhsssh 0.03
+bash accsh 0.03
+bash testScal 0.03
+bash nrunsh 0.03
+
+mkdir H2-b
+mv *.csv ./H2-b/
