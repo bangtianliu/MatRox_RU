@@ -166,8 +166,8 @@ for a specific structure.
 ### matroxTest-V1
 This folder tests the MatRox-generated code for a given structure, in which low-rank approximation is performed at run-time.
 
-###codeGen
+### codeGen
 This folder contains the generated codes for optimization breakdown.
 
-###codeTest
+### codeTest
 This folder tests code from codeGen folder for separating the effect of different optimization techniques.
