@@ -11,19 +11,21 @@
 
 
 bash testMatRox 0.0
-bash nrhssh 0.0
+bash nrhsssh 0.0
 bash accsh 0.0
 bash testScal 0.0
 bash nrunsh 0.0
+bash HSSFlops
 
 mkdir HSS
 mv *.csv ./HSS/
 
 bash testMatRox 0.03
-bash nrhssh 0.03
+bash nrhsssh 0.03
 bash accsh 0.03
 bash testScal 0.03
 bash nrunsh 0.03
+bash H2Flops
 
 mkdir H2-b
 mv *.csv ./H2-b/

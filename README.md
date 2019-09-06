@@ -99,6 +99,17 @@ sbatch nrhssh 0.03
 The results could be found in rhs1.csv, rhs1k.csv, rhs2k.csv and rhs4k.csv for W with 1, 1K, 2K and 4K columns.
 The first column is compression time, second column is code generation time, third column is structure analysis time, last column is the evaluation time.
 
+#### Show the result for optimization breakdown (Figure 5)
+```bash
+#HSS on comet
+sbatch HSSFlops
+#H2-b on comet
+sbatch H2Flops
+```
+The result can be found in hssflops.csv and h2flops.csv respectively.
+For HSS case, the columns are flops result for sequential, coarsening and low-level transformation;
+For H2-b case, the columns are flops result for sequential, blocking, coarsening and low-level transfromation.
+
 #### Show the input accuracy vs overall accuracy (Figure 9)
 ```bash
 cd build/sympiler/
@@ -154,3 +165,9 @@ for a specific structure.
 
 ### matroxTest-V1
 This folder tests the MatRox-generated code for a given structure, in which low-rank approximation is performed at run-time.
+
+###codeGen
+This folder contains the generated codes for optimization breakdown.
+
+###codeTest
+This folder tests code from codeGen folder for separating the effect of different optimization techniques.

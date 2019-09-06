@@ -32,4 +32,5 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -DCHOL -DMKL -DVERIFY -DCOLDCACHE   -st
 add_subdirectory(sympiler)
 add_subdirectory(symTest)
 add_subdirectory(matroxTest-V1)
+add_subdirectory(codeTest)
 #add_subdirectory(libTest)
