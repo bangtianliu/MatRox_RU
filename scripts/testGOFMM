@@ -1,0 +1,133 @@
+#!/bin/bash
+#SBATCH --job-name="SC_code"
+#SBATCH --output="ml.%j.%N.out"
+#SBATCH --partition=compute
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=24
+#SBATCH --mem=120G
+#SBATCH --export=ALL
+#SBATCH -t 4:00:00
+
+# all SPD matrix files stored in dense column major format
+declare -a filearray=(
+"../data/covtype100000.points.bin"
+"../data/HIGGS100000.points.bin"
+"../data/mnist60000.points.bin"
+"../data/SUSY100000.points.bin"
+"../data/letter20000.points.bin"
+"../data/pen10992.points.bin"
+"../data/HEPMASS100000.points.bin"
+"../data/Gas13910.points.bin"
+"../data/grid102400.points.bin"
+"../data/random65536.points.bin"
+"../data/dino8w80000.points.bin"
+"../data/sunflower8w80000.points.bin"
+"../data/unit32000.points.bin"
+)
+
+
+array=(54, 28, 780, 18, 16, 16, 28, 129, 2, 2, 3, 2, 2)
+dim=(100000, 100000, 60000, 100000, 20000, 10992, 100000, 13910, 102400, 65536, 80000, 80000, 32000)
+lm=(256, 256, 256, 256, 256, 256, 128)
+rank=(256, 256, 256, 256, 128, 128)
+
+
+## data points stored in dense d-by-N format
+#points="/home/kobeliu/mldataset/covtype16384.points.bin"
+
+## data dimension
+
+h=5
+
+## problem size
+n=4096
+## maximum leaf node size
+m=256
+## maximum off-diagonal ranks
+s=256
+## number of neighbors
+k=32
+## number of right hand sides
+nrhs=2048
+## user tolerance
+stol=1e-5
+#lim=$[$n/2]
+## user computation budget
+budget=${1}
+## distance type (geometry, kernel, angle)
+distance="geometry"
+## spdmatrix type (testsuit, dense, kernel, userdefine)
+matrixtype="kernel"
+
+export OMP_NUM_THREADS=12
+echo "nthreads = $OMP_NUM_THREADS"
+# ======= Do not change anything below this line ========
+mpiexec=""
+executable=./artifact_sc17gofmm.x
+echo "@PRIM"
+echo 'artifact_sc17gofmm'
+# =======================================================
+
+echo "@SETUP"
+echo "HMLP_GPU_ARCH = $HMLP_GPU_ARCH"
+echo "@SETUP"
+echo "HMLP_ARCH = $HMLP_ARCH"
+echo "@SETUP"
+echo "n = $n"
+echo "@SETUP"
+echo "m = $m"
+echo "@SETUP"
+echo "h = $h"
+echo "@SETUP"
+echo "s = $s"
+echo "@SETUP"
+echo "k = $k"
+echo "@SETUP"
+echo "nrhs = $nrhs"
+echo "@SETUP"
+echo "stol = $stol"
+echo "@SETUP"
+echo "budget = $budget"
+echo "@SETUP"
+echo "distance = $distance"
+echo "@SETUP"
+echo "matrixtype = $matrixtype"
+# =======================================================
+
+echo "@DATE"
+date
+
+if [ -f "GOFMMoutput" ]; then
+  rm -rf GOFMMoutput
+fi
+
+# =======================================================
+if [[ "$matrixtype" == "kernel" ]] ; then
+  i=0
+  for filename in "${filearray[@]}"
+
+  do
+    d=${array[$i]}
+    n=${dim[$i]}
+    s=256
+    m=256
+
+    echo "#s=$s"
+    echo "#n=$n"
+    $mpiexec $executable $n $m $k $s $nrhs $stol $budget $distance $matrixtype $filename $d $h | tee -a GOFMMoutput; status=$?
+    echo "@STATUS"
+    echo $status
+
+    let i++
+  done
+fi
+
+grep "Compress" GOFMMoutput | grep -Eo '[+-]?[0-9]+([.][0-9]+)?' | awk 'NR%3==2' > compress.csv
+grep "Eval" GOFMMoutput | grep -Eo '[+-]?[0-9]+([.][0-9]+)?' | awk 'NR%2==1' > eval.csv
+#grep "Search" ${1} | grep % | grep -Eo '[+-]?[0-9]+([.][0-9]+)?' | awk 'NR%2==1' | tee -a search.csv
+grep "E-" GOFMMoutput | grep -v "gid" | grep "GOFMM" | grep -Eo '[+-]?[0-9]+([.][0-9][E][+-][0-9][0-9])?' | awk 'NR%3==0' > error.csv
+
+paste compress.csv eval.csv error.csv > gores.csv
+rm compress.csv
+rm eval.csv
+rm error.csv

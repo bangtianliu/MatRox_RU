@@ -1,0 +1,178 @@
+#!/bin/bash
+#SBATCH --job-name="SC_code"
+#SBATCH --output="ml.%j.%N.out"
+#SBATCH --partition=compute
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=24
+#SBATCH --mem=120G
+#SBATCH --export=ALL
+#SBATCH -t 4:00:00
+
+# all SPD matrix files stored in dense column major format
+declare -a filearray=(
+"/home/kobeliu/mldataset/covtype100000.points.bin"
+#"/home/kobeliu/mldataset/HIGGS100000.points.bin"
+#"/home/kobeliu/mldataset/mnist60000.points.bin"
+#"/home/kobeliu/mldataset/SUSY100000.points.bin"
+#"/home/kobeliu/mldataset/letter20000.points.bin"
+#"/home/kobeliu/mldataset/pen10992.points.bin"
+#"/home/kobeliu/mldataset/HEPMASS100000.points.bin"
+#"/home/kobeliu/mldataset/Gas13910.points.bin"
+#"/home/kobeliu/mldataset/grid102400.points.bin"
+#"/home/kobeliu/mldataset/random65536.points.bin"
+#"/home/kobeliu/mldataset/dino8w80000.points.bin"
+#"/home/kobeliu/mldataset/sunflower8w80000.points.bin"
+#"/home/kobeliu/mldataset/unit32000.points.bin"
+)
+
+
+array=(54, 28, 780, 18, 16, 16, 28, 129, 2, 2, 3, 2, 2)
+dim=(100000, 100000, 60000, 100000, 20000, 10992, 100000, 13910, 102400, 65536, 80000, 80000, 32000)
+bg=(0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.04, 0.04, 0.06)
+lm=(256, 256, 256, 256, 256, 256, 128)
+rank=(256, 256, 256, 256, 128, 128)
+
+
+## data points stored in dense d-by-N format
+#points="/home/kobeliu/mldataset/covtype16384.points.bin"
+
+## data dimension
+
+h=5
+
+## problem size
+n=4096
+## maximum leaf node size
+m=256
+## maximum off-diagonal ranks
+s=256
+## number of neighbors
+k=32
+## number of right hand sides
+nrhs=2048
+## user tolerance
+stol=1e-5
+#lim=$[$n/2]
+## user computation budget
+budget=0.0
+## distance type (geometry, kernel, angle)
+distance="geometry"
+## spdmatrix type (testsuit, dense, kernel, userdefine)
+matrixtype="kernel"
+
+export OMP_NUM_THREADS=12
+echo "nthreads = $OMP_NUM_THREADS"
+# ======= Do not change anything below this line ========
+mpiexec=""
+executable=./artifact_sc17gofmm.x
+echo "@PRIM"
+echo 'artifact_sc17gofmm'
+# =======================================================
+
+echo "@SETUP"
+echo "HMLP_GPU_ARCH = $HMLP_GPU_ARCH"
+echo "@SETUP"
+echo "HMLP_ARCH = $HMLP_ARCH"
+echo "@SETUP"
+echo "n = $n"
+echo "@SETUP"
+echo "m = $m"
+echo "@SETUP"
+echo "h = $h"
+echo "@SETUP"
+echo "s = $s"
+echo "@SETUP"
+echo "k = $k"
+echo "@SETUP"
+echo "nrhs = $nrhs"
+echo "@SETUP"
+echo "stol = $stol"
+echo "@SETUP"
+echo "budget = $budget"
+echo "@SETUP"
+echo "distance = $distance"
+echo "@SETUP"
+echo "matrixtype = $matrixtype"
+# =======================================================
+
+echo "@DATE"
+date
+
+if [ -f "GOFMMoutput" ]; then
+  rm -rf GOFMMoutput
+fi
+
+if [[ "$matrixtype" == "kernel" ]] ; then
+  i=0
+  for filename in "${filearray[@]}"
+
+  do
+    d=${array[$i]}
+    n=${dim[$i]}
+    s=256
+    m=256
+
+    budget=0.0
+
+    echo "#s=$s"
+    echo "#n=$n"
+    nrhs=1
+    $mpiexec $executable $n $m $k $s $nrhs $stol $budget $distance $matrixtype $filename $d $h | tee -a GOFMMoutput; status=$?
+    nrhs=1024
+    $mpiexec $executable $n $m $k $s $nrhs $stol $budget $distance $matrixtype $filename $d $h | tee -a GOFMMoutput; status=$?
+    nrhs=2048
+    $mpiexec $executable $n $m $k $s $nrhs $stol $budget $distance $matrixtype $filename $d $h | tee -a GOFMMoutput; status=$?
+    nrhs=4096
+    $mpiexec $executable $n $m $k $s $nrhs $stol $budget $distance $matrixtype $filename $d $h | tee -a GOFMMoutput; status=$?
+    echo "@STATUS"
+    echo $status
+
+    let i++
+  done
+fi
+
+
+grep "Compress" GOFMMoutput | grep -Eo '[+-]?[0-9]+([.][0-9]+)?' | awk 'NR%3==2' > compress.csv
+grep "Eval" GOFMMoutput | grep -Eo '[+-]?[0-9]+([.][0-9]+)?' | awk 'NR%2==1' > eval.csv
+
+paste compress.csv eval.csv > gofmm.csv
+awk -F "," '{print $1,$2}' gofmm.csv | xargs -n4 -d'\n' > tgofmm.csv
+
+awk -F ",| " '{print $1,$2}' OFS=, tgofmm.csv > tgorhs1.csv
+awk -F ",| " '{print $3,$4}' OFS=, tgofmm.csv > tgorhs1k.csv
+awk -F ",| " '{print $5,$6}' OFS=, tgofmm.csv > tgorhs2k.csv
+awk -F ",| " '{print $7,$8}' OFS=, tgofmm.csv > tgorhs4k.csv
+
+declare -a tfilearray=(
+"covtype"
+"higgs"
+"mnist"
+"susy"
+"letter"
+"pen"
+"hepmass"
+"gas"
+"grid"
+"random"
+"dino"
+"sunflower"
+"unit"
+)
+
+rm data.csv
+for filename in "${tfilearray[@]}"
+do
+  echo "$filename," >> data.csv
+done
+
+
+paste data.csv tgorhs1.csv > gorhs1.csv
+paste data.csv tgorhs1k.csv > gorhs1k.csv
+paste data.csv tgorhs2k.csv > gorhs2k.csv
+paste data.csv tgorhs4k.csv > gorhs4k.csv
+
+rm tgorhs1.csv
+rm tgorhs1k.csv
+rm tgorhs2k.csv
+rm tgorhs4k.csv
+rm data.csv

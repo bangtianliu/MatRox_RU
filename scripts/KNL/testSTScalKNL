@@ -1,0 +1,68 @@
+#!/bin/bash
+
+
+#SBATCH -J "Hiearchical"
+#SBATCH -o "ml.o%j"
+#SBATCH -e "ml.e%j"
+#SBATCH -p normal
+#SBATCH -N 1
+#SBATCH -n 1
+#SBATCH -t 01:30:00
+#SBATCH -A TG-CCR180004
+
+
+## all SPD matrix files stored in dense column major format
+declare -a filearray=(
+"../data/letter20000.points.bin"
+"../data/pen10992.points.bin"
+"../data/Gas13910.points.bin"
+"../data/unit32000.points.bin"
+)
+
+
+array=(16, 16, 129, 2)
+
+if [ -f stout ]; then
+  rm -rf stout
+fi
+
+executable="./artfact_strumpack_knl.x"
+
+echo "#@DATE"
+date
+i=0
+for filename in "${filearray[@]}"
+do
+d=${array[$i]}
+echo "#dim=$d"
+
+  for j in 1 2 4 8 17 34 68
+  do
+
+    export OMP_NUM_THREADS=${j}
+    $executable $filename $d 5 | tee -a stout
+  done
+let i++
+done
+
+
+grep "Evaluation time" stout | grep -Eo '[0-9]*+[.]+[0-9]*' > eval.csv
+
+awk -F "\"*,\"*" '{print $1}' eval.csv | xargs -n7 -d'\n' > tstscal.csv
+
+declare -a tfilearray=(
+"letter"
+"pen"
+"gas"
+"unit"
+)
+
+rm data.csv
+for filename in "${tfilearray[@]}"
+do
+  echo "$filename," >> data.csv
+done
+
+paste data.csv tstscal.csv > stscal_knl.csv
+
+rm tstscal.csv

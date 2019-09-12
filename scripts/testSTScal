@@ -1,0 +1,67 @@
+#!/bin/bash
+
+#SBATCH --job-name="Strumpack"
+#SBATCH --output="ml.%j.%N.out"
+#SBATCH --partition=compute
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=24
+#SBATCH --export=ALL
+#SBATCH -t 01:30:00
+
+
+
+## all SPD matrix files stored in dense column major format
+declare -a filearray=(
+"../data/letter20000.points.bin"
+"../data/pen10992.points.bin"
+"../data/Gas13910.points.bin"
+"../data/unit32000.points.bin"
+)
+
+
+array=(16, 16, 129, 2)
+
+if [ -f stout ]; then
+  rm -rf stout
+fi
+
+executable="./artifact_strumpack.x"
+
+echo "#@DATE"
+date
+i=0
+for filename in "${filearray[@]}"
+do
+d=${array[$i]}
+echo "#dim=$d"
+
+  for j in {1..12}
+  do
+
+    export OMP_NUM_THREADS=${j}
+    $executable $filename $d 5 | tee -a stout
+  done
+let i++
+done
+
+
+grep "Evaluation time" stout | grep -Eo '[0-9]*+[.]+[0-9]*' > eval.csv
+
+awk -F "\"*,\"*" '{print $1}' eval.csv | xargs -n12 -d'\n' > tstscal.csv
+
+declare -a tfilearray=(
+"letter"
+"pen"
+"gas"
+"unit"
+)
+
+rm data.csv
+for filename in "${tfilearray[@]}"
+do
+  echo "$filename," >> data.csv
+done
+
+paste data.csv tstscal.csv > stscal.csv
+
+rm tstscal.csv

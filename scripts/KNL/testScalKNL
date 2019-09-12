@@ -1,0 +1,81 @@
+#!/bin/bash
+
+
+#SBATCH -J "Hiearchical"
+#SBATCH -o "ml.o%j"
+#SBATCH -e "ml.e%j"
+#SBATCH -p normal
+#SBATCH -N 1
+#SBATCH -n 1
+#SBATCH -t 01:30:00
+#SBATCH -A TG-CCR180004
+
+
+# all SPD matrix files stored in dense column major format
+declare -a filearray=(
+"../../data/covtype100000.points.bin"
+"../../data/HIGGS100000.points.bin"
+"../../data/mnist60000.points.bin"
+"../../data/SUSY100000.points.bin"
+"../../data/letter20000.points.bin"
+"../../data/pen10992.points.bin"
+"../../data/HEPMASS100000.points.bin"
+"../../data/Gas13910.points.bin"
+"../../data/grid102400.points.bin"
+"../../data/random65536.points.bin"
+"../../data/dino8w80000.points.bin"
+"../../data/sunflower8w80000.points.bin"
+"../../data/unit32000.points.bin"
+)
+
+
+array=(54, 28, 780, 18, 16, 16, 28, 129, 2, 2, 3, 2, 2)
+dim=(100000, 100000, 60000, 100000, 20000, 10992, 100000, 13910, 102400, 65536, 80000, 80000, 32000)
+
+rm comtest.csv
+rm runtest.csv
+executable=./sympiler_proj
+  i=0
+  for filename in "${filearray[@]}"
+
+  do
+    d=${array[$i]}
+    n=${dim[$i]}
+    #budget=${bg[$i]}
+
+    #export OMP_NUM_THREADS=12;
+    budget=${1}
+    echo "#filename=$filename"
+
+    #for j in {1..3}
+    #do
+    rm *.bin | $executable $filename $n $d $budget | tee -a comtest.csv
+    #rm *.bin | $executable $filename $n $d $budget | tee -a comtest.csv
+    #rm *.bin | $executable $filename $n $d $budget | tee -a comtest.csv
+    #   rm *.bin | $executable $filename $n $d 1e-5 | tee -a comtest.csv
+    #   rm *.bin | $executable $filename $n $d 1e-5 | tee -a comtest.csv
+
+    cd ../matroxTest-V1/
+
+    make
+
+
+    for j in 1 2 4 8 17 34 68
+    do
+      export OMP_NUM_THREADS=${j}
+      ./FMatRoxHGEMM $filename $n $d 1e-5 | tee -a runtest.csv
+    done
+
+
+
+    cd ../sympiler/
+    #done
+    let i++
+  done
+  mv ../matroxTest-V1/runtest.csv ./
+
+  awk -F "\"*,\"*" '{print $3}' runtest.csv | xargs -n7 -d'\n' > scal1.csv
+  bash datash1
+  paste data.csv scal1.csv > knlscal.csv
+  rm scal1.csv
+
