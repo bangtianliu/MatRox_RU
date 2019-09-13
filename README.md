@@ -19,7 +19,7 @@ set(OMP /share/apps/compute/intel/intelmpi2018/compilers_and_libraries/linux/lib
 set(MKL_INCLUDE_DIRS ${MKL_ROOT}/include/)
 set(MKL_LIBRARIES ${MKL_ROOT}/lib/intel64/)
 ```
-As local machine, you need to define the path to library in CMakeLists.txt in MatRox/sympiler/ and MatRox/matroxTest-V1/ for MatRox compilation and Testing MatRox-generated code.
+As local machine, you need to define the path to library in CMakeLists.txt in MatRox/sympiler/, MatRox/matroxTest-V1/ and MatRox/codeTest for MatRox compilation and Testing MatRox-generated code.
 
 
 ### Building MatRox
@@ -33,6 +33,9 @@ make
 ```
 ### Scripts
 Please copy all scripts in this folder to MatRox_RU/build/sympiler/ to run the tests. You should go to MatRox_RU/build/sympiler/ to run the scripts
+In the KNL subfolder, there are scipts for testing MatRox, GOFMM and SMASH on KNL.
+
+The scripts for testing GOFMM, STRUMPACK and SMASH are named with letters "GO", "ST" and "SMA". The scripts for evaluating reference tools should be copied to libTest folder.
 
 ### Testing MatRox-generated code
 The first step is to set the environmental variables corresponding
@@ -88,6 +91,14 @@ There are 6 columns:
 
 Compression time = item 1 + item 4
 
+GOFMM and STRUMPACK can be evaluated by using
+```bash
+#GOFMM for HSS
+sbatch testGOFMM 0
+#STRUMPACK
+sbatch testST
+```
+
 #### Show the result for multiple right hand sides (Figure 4)
 
 ```bash
@@ -98,6 +109,8 @@ sbatch nrhssh 0.03
 ```
 The results could be found in rhs1.csv, rhs1k.csv, rhs2k.csv and rhs4k.csv for W with 1, 1K, 2K and 4K columns.
 The first column is compression time, second column is code generation time, third column is structure analysis time, last column is the evaluation time.
+
+The results for GOFMM and STRUMPACK can be tested using GOnrhssh and STnrhssh
 
 #### Show the result for optimization breakdown (Figure 5)
 ```bash
@@ -126,6 +139,7 @@ bash accsh 0.03
 The result could be found in acc.csv, in which each row has 5 items show the overall accuracies related to 1e-1,1e-2,1e-3,1e-4 and 1e-5 for one dataset.
 
 
+
 #### Show the scalability result (Figure 7)
 ```bash
 #=
@@ -141,6 +155,9 @@ bash testScal 0.03
 ```
 The result could be found in scal.csv, in which each row has 12 items show the performance of evaluation code related to 1-12 threads.
 
+
+The results for GOFMM, STRUMPACK and SMASH can be tested using scripts: testGOScal, testSTScal and testSMAScal.
+
 #### Show the results for multiple runs (Figure 10)
 ```bash
 #HSS on comet
@@ -149,6 +166,8 @@ sbatch nrunsh 0.0
 sbatch nrunsh 0.03
 ```
 The result could be found in nrun.csv
+
+The results for GOFMM can be tested using GOnrunsh
 
 ## Source Tree Description
 
@@ -171,3 +190,6 @@ This folder contains the generated codes for optimization breakdown.
 
 ### codeTest
 This folder tests code from codeGen folder for separating the effect of different optimization techniques.
+
+### libTest
+This folder contains the binary files compiled using other reference libraries.   
