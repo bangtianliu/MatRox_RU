@@ -1,0 +1,43 @@
+#!/bin/bash
+#SBATCH -A ucb191
+#SBATCH --job-name="SC_code"
+#SBATCH --output="ml.%j.%N.out"
+#SBATCH --partition=compute
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=24
+#SBATCH --mem=120G
+#SBATCH --export=ALL
+#SBATCH -t 1:00:00
+
+# all SPD matrix files stored in dense column major format
+declare -a filearray=(
+"../data/grid.csv"
+"../data/random.csv"
+"../data/dino8w.csv"
+"../data/sunflower8w.csv"
+"../data/unit.csv"
+)
+
+module load gnu/6.2.0
+export OMP_NUM_THREADS=12
+
+array=(2, 2, 3, 2, 2)
+dim=(102400, 65536, 80000, 80000, 32000)
+
+if [ -f smashout ]; then
+  rm -rf smashout
+fi
+
+executable="./artifact_smash.x"
+
+for filename in "${filearray[@]}"
+do
+    $executable -t 1e-4 -f $filename | tee -a smashout
+done
+
+
+grep "total" smashout | grep -Eo "[0-9]*" | awk "NR%5==1" > comp.csv
+grep "total" smashout | grep -Eo "[0-9]*" | awk "NR%5==2" > eval.csv
+grep "rel-err" smashout | grep -Eo "[0-9]+[.]+([0-9])*+[e]+[+-]+[0-9]*" > err.csv
+
+paste comp.csv eval.csv err.csv > smares.csv
