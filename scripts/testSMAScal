@@ -1,0 +1,66 @@
+#!/bin/bash
+#SBATCH -A ucb191
+#SBATCH --job-name="SC_code"
+#SBATCH --output="ml.%j.%N.out"
+#SBATCH --partition=compute
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=24
+#SBATCH --mem=120G
+#SBATCH --export=ALL
+#SBATCH -t 48:00:00
+
+# all SPD matrix files stored in dense column major format
+declare -a filearray=(
+"../data/grid.csv"
+"../data/random.csv"
+"../data/dino8w.csv"
+"../data/sunflower8w.csv"
+"../data/unit.csv"
+)
+
+module load gnu/6.2.0
+export OMP_NUM_THREADS=12
+
+array=(2, 2, 3, 2, 2)
+dim=(102400, 65536, 80000, 80000, 32000)
+
+if [ -f smashout ]; then
+  rm -rf smashout
+fi
+
+
+executable="./artifact_smash.x"
+
+for filename in "${filearray[@]}"
+do
+    for j in {1..12}
+    do
+      export OMP_NUM_THREADS=${j}
+    $executable -t 1e-5 -f $filename | tee -a smashout
+    done
+done
+
+
+grep "total" smashout | grep -Eo "[0-9]*" | awk "NR%5==2" > eval.csv
+
+
+awk -F "\"*,\"*" '{print $1}' eval.csv | xargs -n12 -d'\n' > tsmascal.csv
+
+
+declare -a tfilearray=(
+"grid"
+"random"
+"dino"
+"sunflower"
+"unit"
+)
+
+rm data.csv
+for filename in "${tfilearray[@]}"
+do
+  echo "$filename," >> data.csv
+done
+
+paste data.csv tsmascal.csv > smascal.csv
+
+rm tsmascal.csv
