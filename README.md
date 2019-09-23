@@ -193,3 +193,7 @@ This folder tests code from codeGen folder for separating the effect of differen
 
 ### libTest
 This folder contains the binary files compiled using other reference libraries.   
+
+### Figures
+This folder contains the python scripts and instructions for generating the experiment results in the paper submission.
+The subfolder refResult includes the results (csv files) and images (eps files) I generated first based on the instructions as reference. 
