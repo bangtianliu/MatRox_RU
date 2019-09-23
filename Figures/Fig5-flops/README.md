@@ -1,12 +1,12 @@
-##How to generate Figure 5
-####Example for HSS
+## How to generate Figure 5
+#### Example for HSS
 ```bash
 python drawhssflops.py --s [path/to/hssflops.csv] --g [path/to/gohssflops.csv] --t [path/to/stflops.csv]
 ```
 - hssnrhs.csv -> running "sbatch HSSFlops under /MatRox_RU/build/sympiler/,
 - gohssnrhs.csv -> running "sbatch testGOFlops 0.0" under /MatRox_RU/libTest/ for GOFMM result.
 - stnrhs..csv  -> running "sbatch testSTFlops" under /MatRox_RU/libTest/ for STRUMPACK result
-####Example for H2b
+#### Example for H2b
 ```bash
 python drawh2bflops.py --s [path/to/h2flops.csv] --g [path/to/goh2flops.csv]
 ```

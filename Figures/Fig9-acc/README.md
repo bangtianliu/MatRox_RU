@@ -1,4 +1,4 @@
-##How to generate Figure 9
+## How to generate Figure 9
 
 ```bash
 python drawacc.py [path/to/acc.csv]

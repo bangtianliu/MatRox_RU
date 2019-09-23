@@ -121,7 +121,7 @@ sbatch H2Flops
 ```
 The result can be found in hssflops.csv and h2flops.csv respectively.
 For HSS case, the columns are flops result for sequential, coarsening and low-level transformation;
-For H2-b case, the columns are flops result for sequential, blocking, coarsening and low-level transfromation.
+For H2-b case, the columns are flops result for sequential, blocking, coarsening and low-level transformation.
 
 #### Show the input accuracy vs overall accuracy (Figure 9)
 ```bash
@@ -144,14 +144,7 @@ The result could be found in acc.csv, in which each row has 5 items show the ove
 ```bash
 #=
 #HSS on comet
-sbatch testScal 0  
-#HSS local
-bash testScal 0
-#H2-b on comet
-sbatch testScal 0.03
-#H2-b local
-bash testScal 0.03
-
+sbatch testScal
 ```
 The result could be found in scal.csv, in which each row has 12 items show the performance of evaluation code related to 1-12 threads.
 
@@ -196,4 +189,4 @@ This folder contains the binary files compiled using other reference libraries.
 
 ### Figures
 This folder contains the python scripts and instructions for generating the experiment results in the paper submission.
-The subfolder refResult includes the results (csv files) and images (eps files) I generated first based on the instructions as reference. 
+The subfolder refResult includes the results (csv files) and images (eps files) I generated first based on the instructions as reference.
