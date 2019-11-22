@@ -26,7 +26,5 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -DCHOL -DMKL -DVERIFY -DCOLDCACHE   -std=gnu++11  -m64  ")
 
 add_subdirectory(sympiler)
-#add_subdirectory(symTest)
 add_subdirectory(matroxTest-V1)
 add_subdirectory(codeTest)
-#add_subdirectory(libTest)

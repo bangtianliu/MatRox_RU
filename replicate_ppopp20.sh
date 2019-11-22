@@ -1,8 +1,8 @@
 #!/bin/bash
 
-export MKLROOT=
+export MKLROOT=/opt/intel/mkl/
 export CMAKE_CXX_COMPILER=/share/apps/compute/intel/intelmpi2018/compilers_and_libraries/linux/bin/intel64/icpc
-export OMP=/share/apps/compute/intel/intelmpi2018/compilers_and_libraries/linux/lib/intel64/
+#export OMP=/share/apps/compute/intel/intelmpi2018/compilers_and_libraries/linux/lib/intel64/
 
 
 ### Installing MatRox
@@ -97,7 +97,7 @@ python drawh2bflops.py --s h2flops.csv --g goh2flops.csv
 
 #Figure 7
 python drawscal.py --m scal.csv --g goscal.csv --s stscal.csv --sa smascal.csv
-python drawscalknl.py --m scalknl.csv --g goscalknl.csv --s stscalknl.csv
+#python drawscalknl.py --m scalknl.csv --g goscalknl.csv --s stscalknl.csv
 
 #Figure 9
 python drawacc.py acc.csv
