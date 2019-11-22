@@ -11,24 +11,26 @@
 
 # all SPD matrix files stored in dense column major format
 declare -a filearray=(
-"../../data/covtype100000.points.bin"
+#"../../data/covtype100000.points.bin"
 "../../data/HIGGS100000.points.bin"
-"../../data/mnist60000.points.bin"
+#"../../data/mnist60000.points.bin"
 "../../data/SUSY100000.points.bin"
 "../../data/letter20000.points.bin"
-"../../data/pen10992.points.bin"
-"../../data/HEPMASS100000.points.bin"
-"../../data/Gas13910.points.bin"
+#"../../data/pen10992.points.bin"
+#"../../data/HEPMASS100000.points.bin"
+#"../../data/Gas13910.points.bin"
 "../../data/grid102400.points.bin"
-"../../data/random65536.points.bin"
-"../../data/dino8w80000.points.bin"
-"../../data/sunflower8w80000.points.bin"
-"../../data/unit32000.points.bin"
+#"../../data/random65536.points.bin"
+#"../../data/dino8w80000.points.bin"
+#"../../data/sunflower8w80000.points.bin"
+#"../../data/unit32000.points.bin"
 )
 
 
-array=(54, 28, 780, 18, 16, 16, 28, 129, 2, 2, 3, 2, 2)
-dim=(100000, 100000, 60000, 100000, 20000, 10992, 100000, 13910, 102400, 65536, 80000, 80000, 32000)
+#array=(54, 28, 780, 18, 16, 16, 28, 129, 2, 2, 3, 2, 2)
+array=(28, 18, 16, 2)
+dim=(100000, 100000, 20000, 102400)
+#dim=(100000, 100000, 60000, 100000, 20000, 10992, 100000, 13910, 102400, 65536, 80000, 80000, 32000)
 
 rm comtest.csv
 rm runtest.csv
@@ -78,13 +80,45 @@ executable=./sympiler_proj
   awk -F ",| " '{$15=$1+$10};{print $15,$9,$2,$11}' OFS=, nrhs.csv > trhs2k.csv
   awk -F ",| " '{$15=$1+$13};{print $15,$12,$2,$14}' OFS=, nrhs.csv > trhs4k.csv
 
-  bash datash1
-  paste data.csv trhs1.csv > rhs1.csv
-  paste data.csv trhs1k.csv > rhs1k.csv
-  paste data.csv trhs2k.csv > rhs2k.csv
-  paste data.csv trhs4k.csv > rhs4k.csv
+declare -a tfilearray=(
+"higgs-1"
+"susy-1"
+"letter-1"
+"grid-1"
+"higgs-1k"
+"susy-1k"
+"letter-1k"
+"grid-1k"
+"higgs-2k"
+"susy-2k"
+"letter-2k"
+"grid-2k"
+"higgs-4k"
+"susy-4k"
+"letter-4k"
+"grid-4k"
+)
 
-  rm trhs1.csv
-  rm trhs1k.csv
-  rm trhs2k.csv
-  rm trhs4k.csv
+rm data.csv
+for filename in "${tfilearray[@]}"
+do
+  echo "$filename," >> data.csv
+done
+
+min=0.0
+
+if [ 1 -eq "$(echo "${budget} > ${min}" | bc)" ]
+then
+  cat trhs1.csv trhs1k.csv trhs2k.csv trhs4k.csv > trhs.csv
+  paste data.csv trhs.csv > h2nrhs.csv
+else
+  cat trhs1.csv trhs1k.csv trhs2k.csv trhs4k.csv > trhs.csv
+  paste data.csv trhs.csv > hssnrhs.csv
+fi
+
+rm trhs1.csv
+rm trhs1k.csv
+rm trhs2k.csv
+rm trhs4k.csv
+rm trhs.csv
+rm data.csv
