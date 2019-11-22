@@ -98,34 +98,34 @@ echo "@DATE"
 date
 #m=8192
 # =======================================================
-#if [ -f "gofmmout" ]; then
-#  rm -rf gofmmout
-#fi
-#
-#if [[ "$matrixtype" == "kernel" ]] ; then
-#  i=0
-#  for filename in "${filearray[@]}"
-#
-#  do
-#    d=${array[$i]}
-#    n=${dim[$i]}
-#    s=256
-#    m=256
-#
-#    echo "#s=$s"
-#    echo "#n=$n"
-#
-#    export OMP_NUM_THREADS=1
-#    $mpiexec $executable $n $m $k $s $nrhs $stol $budget $distance $matrixtype $filename $d $h | tee -a gofmmout; status=$?
-#    export OMP_NUM_THREADS=12
-#    $mpiexec $executable $n $m $k $s $nrhs $stol $budget $distance $matrixtype $filename $d $h | tee -a gofmmout; status=$?
-#    
-#    echo "@STATUS"
-#    echo $status
-#
-#    let i++
-#  done
-#fi
+if [ -f "gofmmout" ]; then
+  rm -rf gofmmout
+fi
+
+if [[ "$matrixtype" == "kernel" ]] ; then
+  i=0
+  for filename in "${filearray[@]}"
+
+  do
+    d=${array[$i]}
+    n=${dim[$i]}
+    s=256
+    m=256
+
+    echo "#s=$s"
+    echo "#n=$n"
+
+    export OMP_NUM_THREADS=1
+    $mpiexec $executable $n $m $k $s $nrhs $stol $budget $distance $matrixtype $filename $d $h | tee -a gofmmout; status=$?
+    export OMP_NUM_THREADS=12
+    $mpiexec $executable $n $m $k $s $nrhs $stol $budget $distance $matrixtype $filename $d $h | tee -a gofmmout; status=$?
+
+    echo "@STATUS"
+    echo $status
+
+    let i++
+  done
+fi
 
 grep "Eval" gofmmout | grep -Eo '[+-]?[0-9]+([.][0-9]+)?' | awk 'NR%2==1' > eval.csv
 
@@ -156,7 +156,7 @@ done
 
 min=0.0
 
-if [ 1 -eq "$(echo "${budget} > ${min}" | bc)" ] 
+if [ 1 -eq "$(echo "${budget} > ${min}" | bc)" ]
 then
   paste data.csv tgoscal.csv > goh2flops.csv
 else
