@@ -2,9 +2,12 @@
 MatRox is a code generator for generating efficient parallel HMatrix-matrix multiplication code, built on top of Sympiler.
 
 
-
 ## PPOPP'20 Artifact Description
-The facilitate the replication of graphs in the PPoPP paper, some scripts are provided that will generate graphs of the paper on the two testbed architectures i.e., Hasewell and KNL nodes. Since the memory requirement for running all datasets are high and it is hard to find a local machine with that specification,  We provide login information to XSEDE Comet and Stampede2 servers to ensure all reviewers can run all datasets.
+### Software and Hardware dependencies
+MatRox requires Intel C++ compiler and Intel MKL library as software dependencies.
+Meeting software dependencies, MatRox can run in any architecture. However, for running all datasets in the PPoPP20 paper, a machine with at least 40GB of RAM is required. 
+
+The facilitate the replication of graphs in the PPoPP paper, some scripts are provided that will generate graphs of the paper on the two testbed architectures i.e., Hasewell and KNL nodes. Since the memory requirement for running all datasets are high and it is hard to find a local machine with that specification,  We provide login information to XSEDE Comet and Stampede2 servers to ensure all reviewers can run all datasets conveniently.
 
 To reproduce graphs on Hasewell which include figures 4, 5, 9, and 10:
 ```
@@ -40,21 +43,14 @@ MatRox requires following dependencies:
 * Intel C++ compiler: For compiling MatRox and also MatRox generated code.
 
 
-### Setup
-Modify the CMakeLists.txt in MatRox_RU/sympiler/ and MatRox_RU/matroxTest-V1/ to Modify the path to MKL library and OPENMP.
-
-Take Comet as an example for setting the path.
-```bash
-set(CMAKE_CXX_COMPILER /share/apps/compute/intel/intelmpi2018/compilers_and_libraries/linux/bin/intel64/icpc)
-set(OMP /share/apps/compute/intel/intelmpi2018/compilers_and_libraries/linux/lib/intel64/)
-
-set(MKL_INCLUDE_DIRS ${MKL_ROOT}/include/)
-set(MKL_LIBRARIES ${MKL_ROOT}/lib/intel64/)
-```
-As local machine, you need to define the path to library in CMakeLists.txt in MatRox/sympiler/, MatRox/matroxTest-V1/ and MatRox/codeTest for MatRox compilation and Testing MatRox-generated code.
-
-
 ### Building MatRox
+Export following environment variables:
+```bash
+export CMAKE_CXX_COMPILER=path/to/icpc
+export MKLROOT=/path/to/mkl/lib/
+```
+
+To build the MatRox following steps have to be done:
 ```bash
 cd where/you/cloned/MatRox
 mkdir build
@@ -63,136 +59,44 @@ cmake ..
 cd sympiler
 make
 ```
-### Scripts
-Copy all scripts in this folder to MatRox_RU/build/sympiler/ to run the tests. You should go to MatRox_RU/build/sympiler/ to run the scripts
-In the KNL subfolder, there are scipts for testing MatRox, GOFMM and SMASH on KNL.
 
-The scripts for testing GOFMM, STRUMPACK and SMASH are named with letters "GO", "ST" and "SMA". The scripts for evaluating reference tools should be copied to libTest folder.
-
-### Testing MatRox-generated code
-The first step is to set the environmental variables corresponding
-to each library. The following shows how the variables are set in bash.
-
-On comet, use the following commands to load intel compiler
+## Testing MatRox-generated code
+### Downloading the dataset
+Download all points from this [Link](https://www.dropbox.com/sh/ab7f8gut3nh22ym/AAA0QXrC3kS0L4iHS2T0kpg-a?dl=0), and unzip it in  MatRox_RU/data folder (the folder should be created first). Assuming you are in MatRox_RU/build/sympiler, alternatively, you can use following commands to download and extract the dataset:
 ```bash
-export MODULEPATH=/share/apps/compute/modulefiles:$MODULEPATH
-module load intel/2018.1.163
+mkdir ../../data
+wget -O ../../data/Points.zip https://www.dropbox.com/sh/ab7f8gut3nh22ym/AAA0QXrC3kS0L4iHS2T0kpg-a?dl=0
+unzip ../../data/Points.zip -d ../../data/
 ```
 
-```bash
-set(CMAKE_CXX_COMPILER /share/apps/compute/intel/intelmpi2018/compilers_and_libraries/linux/bin/intel64/icpc)
-set(OMP /share/apps/compute/intel/intelmpi2018/compilers_and_libraries/linux/lib/intel64/)
-
-set(MKL_INCLUDE_DIRS ${MKL_ROOT}/include/)
-set(MKL_LIBRARIES ${MKL_ROOT}/lib/intel64/)
-```
-
-### dataset
-
-[Link to obtain Points](https://www.dropbox.com/sh/ab7f8gut3nh22ym/AAA0QXrC3kS0L4iHS2T0kpg-a?dl=0), Select all and
-download the dataset in folder named points
-Please put the dataset directly to MatRox_RU/data folder.You can check the
-scripts to make sure you put the dataset into correct directories.
-Since some of used dataset is too large for local machine, we also provide 5 small datasets, which can be executed locally.
+Since some of used dataset is too large for local machine, we also provide 5 small datasets, i.e., TODO: XX, XX, XX, XX, and XX, which can be executed locally.
 
 ### Evaluating MatRox
-After build is done successfully, the following commands can be used
-to evaluate MatRox and MatRox-generated code by running the following scripts:
+After build is done successfully, the following scripts can be used
+to evaluate MatRox and MatRox-generated code for given datasets. 
 
 #### Show the performance and accuracy
 ```bash
 cd build/sympiler/
-#HSS on comet: example command 1
-sbatch testMatRox 0  
 #HSS local: example command 2
 bash testMatRox 0
-#H2-b on comet: example command 3
-sbatch testMatRox 0.03
 #H2-b local: example command 4
 bash testMatRox 0.03
 ```
 The result could be found in res.csv
 
 There are 6 columns:
-1. tree&interaction&sample: time in tree construction, compute interaction and sampling
+1. tree&interaction&sample: total time of tree construction, compute interaction, and sampling
 2. cogen: code generation time
-3. sa: structure analysis
-4. approximation: low-rank approximation
-5. evaluation: the time for evaluation code
-6. acc: overal accuracy
+3. sa: structure analysis time
+4. approximation: low-rank approximation time
+5. evaluation: evaluation code time
+6. acc: overall accuracy
 
 Compression time = item 1 + item 4
 
-GOFMM and STRUMPACK can be evaluated by using
-```bash
-#GOFMM for HSS
-sbatch testGOFMM 0
-#STRUMPACK
-sbatch testST
-```
+A set of scripts are provided in scripts folder that allows exploring different strengths of MatRox. More information are available in [MatRox paper](http://www.paramathic.com/wp-content/uploads/2019/11/matrox_PPOPP.pdf).
 
-#### Show the result for multiple right hand sides (Figure 4)
-
-```bash
-#HSS on comet
-sbatch nrhssh  0.0
-#H2-b on comet
-sbatch nrhssh 0.03
-```
-The results could be found in rhs1.csv, rhs1k.csv, rhs2k.csv and rhs4k.csv for W with 1, 1K, 2K and 4K columns.
-The first column is compression time, second column is code generation time, third column is structure analysis time, last column is the evaluation time.
-
-The results for GOFMM and STRUMPACK can be tested using GOnrhssh and STnrhssh
-
-#### Show the result for optimization breakdown (Figure 5)
-```bash
-#HSS on comet
-sbatch HSSFlops
-#H2-b on comet
-sbatch H2Flops
-```
-The result can be found in hssflops.csv and h2flops.csv respectively.
-For HSS case, the columns are flops result for sequential, coarsening and low-level transformation;
-For H2-b case, the columns are flops result for sequential, blocking, coarsening and low-level transformation.
-
-#### Show the input accuracy vs overall accuracy (Figure 9)
-```bash
-cd build/sympiler/
-#=
-#HSS on comet: example command 1
-sbatch accsh 0  
-#HSS local: example command 2
-bash accsh 0
-#H2-b on comet: example command 3
-sbatch accsh 0.03
-#H2-b local: example command 4
-bash accsh 0.03
-```
-The result could be found in acc.csv, in which each row has 5 items show the overall accuracies related to 1e-1,1e-2,1e-3,1e-4 and 1e-5 for one dataset.
-
-
-
-#### Show the scalability result (Figure 7)
-```bash
-#=
-#HSS on comet
-sbatch testScal
-```
-The result could be found in scal.csv, in which each row has 12 items show the performance of evaluation code related to 1-12 threads.
-
-
-The results for GOFMM, STRUMPACK and SMASH can be tested using scripts: testGOScal, testSTScal and testSMAScal.
-
-#### Show the results for multiple runs (Figure 10)
-```bash
-#HSS on comet
-sbatch nrunsh 0.0
-#H2-b
-sbatch nrunsh 0.03
-```
-The result could be found in nrun.csv
-
-The results for GOFMM can be tested using GOnrunsh
 
 ## Source Tree Description
 

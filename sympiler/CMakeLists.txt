@@ -7,8 +7,11 @@ if(UNIX)
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
 endif()
 
-set(CMAKE_CXX_COMPILER /opt/intel/parallel_studio_xe_2019/compilers_and_libraries_2019/linux/bin/intel64/icpc)
-set(OMP /opt/intel/compilers_and_libraries/linux/lib/intel64/)
+set(OMP "${MKL_LIB2}")
+set(CMAKE_CXX_COMPILER "$ENV{CMAKE_CXX_COMPILER}")
+
+#set(CMAKE_CXX_COMPILER /opt/intel/parallel_studio_xe_2019/compilers_and_libraries_2019/linux/bin/intel64/icpc)
+#set(OMP /opt/intel/compilers_and_libraries/linux/lib/intel64/)
 
 set(MKL_INCLUDE_DIRS ${MKL_ROOT}/include/)
 set(MKL_LIBRARIES ${MKL_ROOT}/lib/intel64/)
