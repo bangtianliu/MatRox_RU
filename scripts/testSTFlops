@@ -12,15 +12,14 @@
 
 ## all SPD matrix files stored in dense column major format
 declare -a filearray=(
-#"../data/letter20000.points.bin"
-#"../data/pen10992.points.bin"
-#"../data/Gas13910.points.bin"
+"../data/letter20000.points.bin"
+"../data/pen10992.points.bin"
+"../data/Gas13910.points.bin"
 "../data/unit32000.points.bin"
 )
 
 
-#array=(16, 16, 129, 2)
-array=(2)
+array=(16, 16, 129, 2)
 
 if [ -f stout ]; then
   rm -rf stout
@@ -36,24 +35,24 @@ do
 d=${array[$i]}
 echo "#dim=$d"
 
-  for j in {1..12}
-  do
+    export OMP_NUM_THREADS=1
+    $executable $filename $d 5 | tee -a stout 
     
-    export OMP_NUM_THREADS=${j}
-    $executable $filename $d 5 | tee -a stout
-  done 
+    export OMP_NUM_THREADS=12
+    $executable $filename $d 5 | tee -a stout 
+
 let i++
 done
 
 
 grep "Evaluation time" stout | grep -Eo '[0-9]*+[.]+[0-9]*' > eval.csv
 
-awk -F "\"*,\"*" '{print $1}' eval.csv | xargs -n12 -d'\n' > tstscal.csv
+awk -F "\"*,\"*" '{print $1}' eval.csv | xargs -n2 -d'\n' > tstscal.csv
 
 declare -a tfilearray=(
-#"letter"
-#"pen"
-#"gas"
+"letter"
+"pen"
+"gas"
 "unit"
 )
 
@@ -63,6 +62,6 @@ do
   echo "$filename," >> data.csv
 done
 
-paste data.csv tstscal.csv > stscal.csv
+paste data.csv tstscal.csv > stflops.csv
 
 rm tstscal.csv

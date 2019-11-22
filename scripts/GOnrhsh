@@ -10,25 +10,26 @@
 
 # all SPD matrix files stored in dense column major format
 declare -a filearray=(
-"/home/kobeliu/mldataset/covtype100000.points.bin"
-#"/home/kobeliu/mldataset/HIGGS100000.points.bin"
-#"/home/kobeliu/mldataset/mnist60000.points.bin"
-#"/home/kobeliu/mldataset/SUSY100000.points.bin"
-#"/home/kobeliu/mldataset/letter20000.points.bin"
-#"/home/kobeliu/mldataset/pen10992.points.bin"
-#"/home/kobeliu/mldataset/HEPMASS100000.points.bin"
-#"/home/kobeliu/mldataset/Gas13910.points.bin"
-#"/home/kobeliu/mldataset/grid102400.points.bin"
-#"/home/kobeliu/mldataset/random65536.points.bin"
-#"/home/kobeliu/mldataset/dino8w80000.points.bin"
-#"/home/kobeliu/mldataset/sunflower8w80000.points.bin"
-#"/home/kobeliu/mldataset/unit32000.points.bin"
+#"../data/covtype100000.points.bin"
+"../data/HIGGS100000.points.bin"
+#"../data/mnist60000.points.bin"
+"../data/SUSY100000.points.bin"
+"../data/letter20000.points.bin"
+#"../data/pen10992.points.bin"
+#"../data/HEPMASS100000.points.bin"
+#"../data/Gas13910.points.bin"
+"../data/grid102400.points.bin"
+#"../data/random65536.points.bin"
+#"../data/dino8w80000.points.bin"
+#"../data/sunflower8w80000.points.bin"
+#"../data/unit32000.points.bin"
 )
 
 
-array=(54, 28, 780, 18, 16, 16, 28, 129, 2, 2, 3, 2, 2)
-dim=(100000, 100000, 60000, 100000, 20000, 10992, 100000, 13910, 102400, 65536, 80000, 80000, 32000)
-bg=(0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.04, 0.04, 0.06)
+#array=(54, 28, 780, 18, 16, 16, 28, 129, 2, 2, 3, 2, 2)
+array=(28, 18, 16, 2)
+#dim=(100000, 100000, 60000, 100000, 20000, 10992, 100000, 13910, 102400, 65536, 80000, 80000, 32000)
+dim=(100000, 100000, 20000, 102400)
 lm=(256, 256, 256, 256, 256, 256, 128)
 rank=(256, 256, 256, 256, 128, 128)
 
@@ -54,7 +55,7 @@ nrhs=2048
 stol=1e-5
 #lim=$[$n/2]
 ## user computation budget
-budget=0.0
+budget=${1}
 ## distance type (geometry, kernel, angle)
 distance="geometry"
 ## spdmatrix type (testsuit, dense, kernel, userdefine)
@@ -112,7 +113,7 @@ if [[ "$matrixtype" == "kernel" ]] ; then
     s=256
     m=256
 
-    budget=0.0
+    #budget=0.0
 
     echo "#s=$s"
     echo "#n=$n"
@@ -143,20 +144,34 @@ awk -F ",| " '{print $3,$4}' OFS=, tgofmm.csv > tgorhs1k.csv
 awk -F ",| " '{print $5,$6}' OFS=, tgofmm.csv > tgorhs2k.csv
 awk -F ",| " '{print $7,$8}' OFS=, tgofmm.csv > tgorhs4k.csv
 
+
+
 declare -a tfilearray=(
-"covtype"
-"higgs"
-"mnist"
-"susy"
-"letter"
-"pen"
-"hepmass"
-"gas"
-"grid"
-"random"
-"dino"
-"sunflower"
-"unit"
+#"covtype"
+"higgs-1"
+"higgs-1k"
+"higgs-2k"
+"higgs-4k"
+#"mnist"
+"susy-1"
+"susy-1k"
+"susy-2k"
+"susy-4k"
+"letter-1"
+"letter-1k"
+"letter-2k"
+"letter-4k"
+#"pen"
+#"hepmass"
+#"gas"
+"grid-1"
+"grid-1k"
+"grid-2k"
+"grid-4k"
+#"random"
+#"dino"
+#"sunflower"
+#"unit"
 )
 
 rm data.csv
@@ -166,13 +181,22 @@ do
 done
 
 
-paste data.csv tgorhs1.csv > gorhs1.csv
-paste data.csv tgorhs1k.csv > gorhs1k.csv
-paste data.csv tgorhs2k.csv > gorhs2k.csv
-paste data.csv tgorhs4k.csv > gorhs4k.csv
+
+min=0.0
+
+if [ 1 -eq "$(echo "${budget} > ${min}" | bc)" ]
+then
+  cat tgorhs1.csv tgorhs1k.csv tgorhs2k.csv tgorhs4k.csv > trhs.csv
+  paste data.csv trhs.csv > h2nrhs.csv
+else
+  cat tgorhs1.csv tgorhs1k.csv tgorhs2k.csv tgorhs4k.csv > trhs.csv
+  paste data.csv trhs.csv > hssnrhs.csv
+fi
+
 
 rm tgorhs1.csv
 rm tgorhs1k.csv
 rm tgorhs2k.csv
 rm tgorhs4k.csv
+rm trhs.csv
 rm data.csv

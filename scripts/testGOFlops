@@ -10,26 +10,24 @@
 
 # all SPD matrix files stored in dense column major format
 declare -a filearray=(
-"../data/covtype100000.points.bin"
-#"../data/HIGGS100000.points.bin"
-#"../data/mnist60000.points.bin"
-#"../data/SUSY100000.points.bin"
-#"../data/letter20000.points.bin"
-#"../data/pen10992.points.bin"
-#"../data/HEPMASS100000.points.bin"
-#"../data/Gas13910.points.bin"
-#"../data/grid102400.points.bin"
-#"../data/random65536.points.bin"
-#"../data/dino8w80000.points.bin"
-#"../data/sunflower8w80000.points.bin"
-"../data/unit32000.points.bin"
+"/home/kobeliu/mldataset/covtype100000.points.bin"
+"/home/kobeliu/mldataset/HIGGS100000.points.bin"
+"/home/kobeliu/mldataset/mnist60000.points.bin"
+"/home/kobeliu/mldataset/SUSY100000.points.bin"
+"/home/kobeliu/mldataset/letter20000.points.bin"
+"/home/kobeliu/mldataset/pen10992.points.bin"
+"/home/kobeliu/mldataset/HEPMASS100000.points.bin"
+"/home/kobeliu/mldataset/Gas13910.points.bin"
+"/home/kobeliu/mldataset/grid102400.points.bin"
+"/home/kobeliu/mldataset/random65536.points.bin"
+"/home/kobeliu/mldataset/dino8w80000.points.bin"
+"/home/kobeliu/mldataset/sunflower8w80000.points.bin"
+"/home/kobeliu/mldataset/unit32000.points.bin"
 )
 
 
-#array=(54, 28, 780, 18, 16, 16, 28, 129, 2, 2, 3, 2, 2)
-array=(54, 2)
-#dim=(100000, 100000, 60000, 100000, 20000, 10992, 100000, 13910, 102400, 65536, 80000, 80000, 32000)
-dim=(100000, 32000)
+array=(54, 28, 780, 18, 16, 16, 28, 129, 2, 2, 3, 2, 2)
+dim=(100000, 100000, 60000, 100000, 20000, 10992, 100000, 13910, 102400, 65536, 80000, 80000, 32000)
 lm=(256, 256, 256, 256, 256, 256, 128)
 rank=(256, 256, 256, 256, 128, 128)
 
@@ -55,7 +53,7 @@ nrhs=2048
 stol=1e-5
 #lim=$[$n/2]
 ## user computation budget
-#budget=${1}
+budget=${1}
 ## distance type (geometry, kernel, angle)
 distance="geometry"
 ## spdmatrix type (testsuit, dense, kernel, userdefine)
@@ -100,92 +98,68 @@ echo "@DATE"
 date
 #m=8192
 # =======================================================
-if [ -f "gofmmout" ]; then
-  rm -rf gofmmout
-fi
-
-budget=0.0
-if [[ "$matrixtype" == "kernel" ]] ; then
-  i=0
-  for filename in "${filearray[@]}"
-
-  do
-    d=${array[$i]}
-    n=${dim[$i]}
-    s=256
-    m=256
-
-    echo "#s=$s"
-    echo "#n=$n"
-
-    for j in {1..12}
-    do
-      export OMP_NUM_THREADS=${j}
-      $mpiexec $executable $n $m $k $s $nrhs $stol $budget $distance $matrixtype $filename $d $h | tee -a gofmmout; status=$?
-    done
-    echo "@STATUS"
-    echo $status
-
-    let i++
-  done
-fi
-
-budget=0.03
-
-if [[ "$matrixtype" == "kernel" ]] ; then
-  i=0
-  for filename in "${filearray[@]}"
-
-  do
-    d=${array[$i]}
-    n=${dim[$i]}
-    s=256
-    m=256
-
-    echo "#s=$s"
-    echo "#n=$n"
-
-    for j in {1..12}
-    do
-      export OMP_NUM_THREADS=${j}
-      $mpiexec $executable $n $m $k $s $nrhs $stol $budget $distance $matrixtype $filename $d $h | tee -a gofmmout; status=$?
-    done
-    echo "@STATUS"
-    echo $status
-
-    let i++
-  done
-fi
-
+#if [ -f "gofmmout" ]; then
+#  rm -rf gofmmout
+#fi
+#
+#if [[ "$matrixtype" == "kernel" ]] ; then
+#  i=0
+#  for filename in "${filearray[@]}"
+#
+#  do
+#    d=${array[$i]}
+#    n=${dim[$i]}
+#    s=256
+#    m=256
+#
+#    echo "#s=$s"
+#    echo "#n=$n"
+#
+#    export OMP_NUM_THREADS=1
+#    $mpiexec $executable $n $m $k $s $nrhs $stol $budget $distance $matrixtype $filename $d $h | tee -a gofmmout; status=$?
+#    export OMP_NUM_THREADS=12
+#    $mpiexec $executable $n $m $k $s $nrhs $stol $budget $distance $matrixtype $filename $d $h | tee -a gofmmout; status=$?
+#    
+#    echo "@STATUS"
+#    echo $status
+#
+#    let i++
+#  done
+#fi
 
 grep "Eval" gofmmout | grep -Eo '[+-]?[0-9]+([.][0-9]+)?' | awk 'NR%2==1' > eval.csv
 
-awk -F "\"*,\"*" '{print $1}' eval.csv | xargs -n12 -d'\n' > tgoscal.csv
+awk -F "\"*,\"*" '{print $1}' eval.csv | xargs -n2 -d'\n' > tgoscal.csv
 
 declare -a tfilearray=(
-"covtype-hss"
-#"higgs"
-#"mnist"
-#"susy"
-#"letter"
-#"pen"
-#"hepmass"
-#"gas"
-#"grid"
-#"random"
-#"dino"
-#"sunflower"
-"unit-hss"
-"covtype-h2b"
-"unit-h2b"
+"covtype"
+"higgs"
+"mnist"
+"susy"
+"letter"
+"pen"
+"hepmass"
+"gas"
+"grid"
+"random"
+"dino"
+"sunflower"
+"unit"
 )
 
 rm data.csv
+
 for filename in "${tfilearray[@]}"
 do
   echo "$filename," >> data.csv
 done
 
-paste data.csv tgoscal.csv > goscal.csv
+min=0.0
 
+if [ 1 -eq "$(echo "${budget} > ${min}" | bc)" ] 
+then
+  paste data.csv tgoscal.csv > goh2flops.csv
+else
+  paste data.csv tgoscal.csv > gohssflops.csv
+fi
 rm tgoscal.csv

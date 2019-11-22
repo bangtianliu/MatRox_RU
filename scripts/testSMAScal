@@ -7,14 +7,14 @@
 #SBATCH --ntasks-per-node=24
 #SBATCH --mem=120G
 #SBATCH --export=ALL
-#SBATCH -t 48:00:00
+#SBATCH -t 4:00:00
 
 # all SPD matrix files stored in dense column major format
 declare -a filearray=(
-"../data/grid.csv"
-"../data/random.csv"
-"../data/dino8w.csv"
-"../data/sunflower8w.csv"
+#"../data/grid.csv"
+#"../data/random.csv"
+#"../data/dino8w.csv"
+#"../data/sunflower8w.csv"
 "../data/unit.csv"
 )
 
@@ -48,10 +48,10 @@ awk -F "\"*,\"*" '{print $1}' eval.csv | xargs -n12 -d'\n' > tsmascal.csv
 
 
 declare -a tfilearray=(
-"grid"
-"random"
-"dino"
-"sunflower"
+#"grid"
+#"random"
+#"dino"
+#"sunflower"
 "unit"
 )
 
