@@ -9,13 +9,16 @@ cometORknl=$1
 fi
 
 if [ $cometORknl -eq 1 ]; then
-export MKLROOT=/opt/intel/mkl/
+export MODULEPATH=/share/apps/compute/modulefiles:$MODULEPATH
+module load intel/2018.1.163 
+export MKLROOT=/share/apps/compute/intel/intelmpi2018/compilers_and_libraries/linux/mkl/
 export CMAKE_CXX_COMPILER=/share/apps/compute/intel/intelmpi2018/compilers_and_libraries/linux/bin/intel64/icpc
 #export OMP=/share/apps/compute/intel/intelmpi2018/compilers_and_libraries/linux/lib/intel64/
 fi
 if [ $cometORknl -eq 2 ]; then
-export MKLROOT=/opt/intel/mkl/  #TODO
-export CMAKE_CXX_COMPILER=/share/apps/compute/intel/intelmpi2018/compilers_and_libraries/linux/bin/intel64/icpc #TODO
+module load intel/18.0.2
+export MKLROOT=/opt/intel/compilers_and_libraries_2018.2.199/linux/mkl/  #TODO
+export CMAKE_CXX_COMPILER=/opt/intel/compilers_and_libraries_2018.2.199/linux/bin/intel64/icpc #TODO
 #export OMP=/share/apps/compute/intel/intelmpi2018/compilers_and_libraries/linux/lib/intel64/
 fi
 
@@ -37,9 +40,9 @@ unzip ../../data/Points.zip -d ../../data/
 
 ### Data generation
 if [ $cometORknl -eq 1 ]; then
-# Accuracy and Performance tests
-sbatch testMatRox 0 
-sbatch testMatRox 0.03
+# # Accuracy and Performance tests
+# sbatch testMatRox 0 
+# sbatch testMatRox 0.03
 
 ### Figure 4: multiple right-hand-sides
 #HSS on comet
@@ -54,22 +57,22 @@ sbatch HSSFlops
 sbatch H2Flops
 
 ### Figure 9:
-#HSS on comet: example command 1
-sbatch accsh 0  
-#HSS local: example command 2
-bash accsh 0
+# #HSS on comet: example command 1
+# sbatch accsh 0  
+# #HSS local: example command 2
+# bash accsh 0
 #H2-b on comet: example command 3
 sbatch accsh 0.03
-#H2-b local: example command 4
-bash accsh 0.03
+# #H2-b local: example command 4
+# bash accsh 0.03
 
 ### Figure 7: Scalability 
 #HSS on comet
 #sbatch testScal
 
 ### Figure 10: multiple runs
-#HSS on comet
-sbatch nrunsh 0.0
+# #HSS on comet
+# sbatch nrunsh 0.0
 #H2-b
 sbatch nrunsh 0.03
 
@@ -80,29 +83,45 @@ sbatch testScalKNL
 fi
 
 ### Library tests
+cd ../../libTest/
 if [ $cometORknl -eq 1 ]; then
-# Accuracy and Performance tests
-#GOFMM for HSS
-sbatch testGOFMM 0
-#STRUMPACK
-sbatch testST
+# # Accuracy and Performance tests
+# #GOFMM for HSS
+# sbatch testGOFMM 0
+# #STRUMPACK
+# sbatch testST
 
 # Figure 4
-sbatch GOnrhssh
-sbatch STnrhssh
+#HSS (GOFMM)
+sbatch GOnrhssh 0.0
+#H2b (GOFMM)
+sbatch GOnrhssh 0.03
+#HSS (STRUMPACK)
+sbatch stnrhsh
 
+#Figure 5
+#HSS  (GOFMM)
+sbatch testGOFlops 0.0
+#H2-b (GOFMM)
+sbatch testGOFlops 0.03
+
+#HSS (STRUMPACK)
+sbatch testSTFlops
+
+#Figure 7
+sbatch testGOScal
+sbatch testSTScal
+sbatch testSMAScal
 
 
 # Figure 10
-sbatch GOnrunsh
+sbatch GOnrunsh 0.03
 fi
 
 if [ $cometORknl -eq 2 ]; then
 # Figure 7
 sbatch testGOScal
 sbatch testSTScal 
-sbatch testSMA
-
 fi
 
 ### Plotting graphs
@@ -120,7 +139,7 @@ python drawhssflops.py --s hssflops.csv --g gohssflops.csv --t stflops.csv
 python drawh2bflops.py --s h2flops.csv --g goh2flops.csv
 
 #Figure 7
-#python drawscal.py --m scal.csv --g goscal.csv --s stscal.csv --sa smascal.csv
+python drawscal.py --m scal.csv --g goscal.csv --s stscal.csv --sa smascal.csv
 
 #Figure 9
 python drawacc.py acc.csv
