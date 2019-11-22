@@ -7,6 +7,7 @@ MatRox is a code generator for generating efficient parallel HMatrix-matrix mult
 MatRox requires Intel C++ compiler and Intel MKL library as software dependencies.
 Meeting software dependencies, MatRox can run in any architecture. However, for running all datasets in the PPoPP20 paper, a machine with at least 40GB of RAM is required. 
 
+### Replicating Graphs
 The facilitate the replication of graphs in the PPoPP paper, some scripts are provided that will generate graphs of the paper on the two testbed architectures i.e., Hasewell and KNL nodes. Since the memory requirement for running all datasets are high and it is hard to find a local machine with that specification,  We provide login information to XSEDE Comet and Stampede2 servers to ensure all reviewers can run all datasets conveniently.
 
 To reproduce graphs on Hasewell which include figures 4, 5, 9, and 10:
@@ -108,21 +109,21 @@ The MatRox-generated code is stored here by default and is used for testing
 Sympiler in matroxTest-V1 folder.
 
 ### sympiler
-This folder contains the source of MatRox based on sympiler code. Running this code generates code
+This folder contains the source of MatRox based on the Sympiler code. This project generates code
 for a specific structure.
 
 ### matroxTest-V1
 This folder tests the MatRox-generated code for a given structure, in which low-rank approximation is performed at run-time.
 
 ### codeGen
-This folder contains the generated codes for optimization breakdown.
+This folder contains the MatRox-generated code for optimization breakdown.
 
 ### codeTest
 This folder tests code from codeGen folder for separating the effect of different optimization techniques.
 
 ### libTest
-This folder contains the binary files compiled using other reference libraries.   
+This folder contains the binary files of other reference libraries.   
 
 ### Figures
-This folder contains the python scripts and instructions for generating the experiment results in the paper submission.
-The subfolder refResult includes the results (csv files) and images (eps files) I generated first based on the instructions as reference.
+This folder contains the python scripts and instructions for generating the experiment results in the MatRox paper.
+The subfolder refResult provides results (csv files) and images (eps files) for sanity check.
