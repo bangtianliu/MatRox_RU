@@ -1,9 +1,23 @@
 #!/bin/bash
+# TODO: Are these the same in KNL?
+module load cmake
+module load intel
+module load python
+cometORknl=1  # Comet is 1, KNL is 2
+if [ "$#" -eq 1 ]; then
+cometORknl=$1
+fi
 
+if [ $cometORknl -eq 1 ]; then
 export MKLROOT=/opt/intel/mkl/
 export CMAKE_CXX_COMPILER=/share/apps/compute/intel/intelmpi2018/compilers_and_libraries/linux/bin/intel64/icpc
 #export OMP=/share/apps/compute/intel/intelmpi2018/compilers_and_libraries/linux/lib/intel64/
-
+fi
+if [ $cometORknl -eq 2 ]; then
+export MKLROOT=/opt/intel/mkl/  #TODO
+export CMAKE_CXX_COMPILER=/share/apps/compute/intel/intelmpi2018/compilers_and_libraries/linux/bin/intel64/icpc #TODO
+#export OMP=/share/apps/compute/intel/intelmpi2018/compilers_and_libraries/linux/lib/intel64/
+fi
 
 ### Installing MatRox
 mkdir build
@@ -22,6 +36,7 @@ unzip ../../data/Points.zip -d ../../data/
 
 
 ### Data generation
+if [ $cometORknl -eq 1 ]; then
 # Accuracy and Performance tests
 sbatch testMatRox 0 
 sbatch testMatRox 0.03
@@ -50,7 +65,7 @@ bash accsh 0.03
 
 ### Figure 7: Scalability 
 #HSS on comet
-sbatch testScal
+#sbatch testScal
 
 ### Figure 10: multiple runs
 #HSS on comet
@@ -58,9 +73,14 @@ sbatch nrunsh 0.0
 #H2-b
 sbatch nrunsh 0.03
 
+fi
 
+if [ $cometORknl -eq 2 ]; then
+sbatch testScalKNL
+fi
 
 ### Library tests
+if [ $cometORknl -eq 1 ]; then
 # Accuracy and Performance tests
 #GOFMM for HSS
 sbatch testGOFMM 0
@@ -71,18 +91,22 @@ sbatch testST
 sbatch GOnrhssh
 sbatch STnrhssh
 
+
+
+# Figure 10
+sbatch GOnrunsh
+fi
+
+if [ $cometORknl -eq 2 ]; then
 # Figure 7
 sbatch testGOScal
 sbatch testSTScal 
 sbatch testSMA
 
-
-# Figure 10
-sbatch GOnrunsh
-
-
+fi
 
 ### Plotting graphs
+if [ $cometORknl -eq 1 ]; then
 #Figure 4-HSS
 python drawhssnrhs.py --s hssnrhs.csv --g gohssnrhs.csv --t stnrhs.csv
 
@@ -96,11 +120,16 @@ python drawhssflops.py --s hssflops.csv --g gohssflops.csv --t stflops.csv
 python drawh2bflops.py --s h2flops.csv --g goh2flops.csv
 
 #Figure 7
-python drawscal.py --m scal.csv --g goscal.csv --s stscal.csv --sa smascal.csv
-#python drawscalknl.py --m scalknl.csv --g goscalknl.csv --s stscalknl.csv
+#python drawscal.py --m scal.csv --g goscal.csv --s stscal.csv --sa smascal.csv
 
 #Figure 9
 python drawacc.py acc.csv
 
 #Figure 10
 python drawnrun.py --m nrun.csv --g gonrun.csv
+
+fi
+
+if [ $cometORknl -eq 2 ]; then
+python drawscalknl.py --m scalknl.csv --g goscalknl.csv --s stscalknl.csv
+fi

@@ -30,7 +30,6 @@ typedef struct buffer_t {
 } buffer_t;
 #endif
 #define __user_context_ NULL
-#define HSS
 struct halide_filter_metadata_t;
 extern "C" {
 void *sympiler_malloc(void *ctx, size_t s){return(malloc(s));}
@@ -121,35 +120,44 @@ extern "C" {
 int32_t HGEMM(double *D, 
 double *B, double *VT, uint64_t *Dptr, uint64_t *Bptr, int32_t *VTptr, int32_t *lchildren, int32_t *rchildren, int32_t *levelset, int32_t *idx, double *mrhs, 
 double *apres, int32_t nrhs, int32_t *Ddim, int32_t *wptr, int32_t *uptr, double *wskel, int32_t *wskeloffset, double *uskel, int32_t *uskeloffset, int32_t *lm, 
-int32_t *slen, int32_t *wpart, int32_t *clevelset) {
+int32_t *slen, int32_t *nblockSet, int32_t *nblocks, int32_t *npairx, int32_t *npairy, int32_t *fblockSet, int32_t *fblocks, int32_t *fpairx, int32_t *fpairy, int32_t *wpart, 
+int32_t *clevelset) {
  #pragma omp parallel for
-for (int i = 0; i < 512; i++)
- {
-  cblas_dgemm(CblasColMajor, CblasNoTrans, CblasNoTrans, 
-  Ddim[i],nrhs,Ddim[i],
-  float_from_bits(1065353216 /* 1 */), &D[Dptr[i]], 
-  Ddim[i], &mrhs[wptr[i]], Ddim[i], float_from_bits(0 /* 0 */), 
-  &apres[uptr[i]],  Ddim[i]);
- } // for i
- for (int i = 0; i < 5; i++)
+for (int i = 0; i < 64; i++)
  {
   int32_t _0 = i + 1;
-    #pragma omp parallel for
-for (int k = clevelset[i]; k < clevelset[_0]; k++)
+  for (int j = nblockSet[i]; j < nblockSet[_0]; j++)
   {
-   int32_t _1 = k + 1;
-   for (int j = wpart[k]; j < wpart[_1]; j++)
+   int32_t _1 = j + 1;
+   for (int k = nblocks[j]; k < nblocks[_1]; k++)
    {
-    int32_t _2 = (int32_t)(4294967295);
-    bool _3 = lchildren[idx[j]] == _2;
-    if (_3)
+    cblas_dgemm(CblasColMajor, CblasNoTrans, CblasNoTrans, 
+    Ddim[npairx[k]],nrhs,Ddim[npairy[k]],
+    float_from_bits(1065353216 /* 1 */), &D[Dptr[k]], 
+    Ddim[npairx[k]], &mrhs[wptr[npairy[k]]], Ddim[npairy[k]], float_from_bits(1065353216 /* 1 */), 
+    &apres[uptr[npairx[k]]],  Ddim[npairx[k]]);
+   } // for k
+  } // for j
+ } // for i
+ for (int i = 0; i < 4; i++)
+ {
+  int32_t _2 = i + 1;
+    #pragma omp parallel for
+for (int k = clevelset[i]; k < clevelset[_2]; k++)
+  {
+   int32_t _3 = k + 1;
+   for (int j = wpart[k]; j < wpart[_3]; j++)
+   {
+    int32_t _4 = (int32_t)(4294967295);
+    bool _5 = lchildren[idx[j]] == _4;
+    if (_5)
     {
      cblas_dgemm(CblasColMajor, CblasNoTrans, CblasNoTrans, 
      slen[idx[j]],nrhs,Ddim[lm[idx[j]]],
      float_from_bits(1065353216 /* 1 */), &VT[VTptr[idx[j]]], 
      slen[idx[j]], &mrhs[wptr[lm[idx[j]]]], Ddim[lm[idx[j]]], float_from_bits(0 /* 0 */), 
      &wskel[wskeloffset[idx[j]]],  slen[idx[j]]);
-    } // if _3
+    } // if _5
     else
     {
      cblas_dgemm(CblasColMajor, CblasNoTrans, CblasNoTrans, 
@@ -157,58 +165,57 @@ for (int k = clevelset[i]; k < clevelset[_0]; k++)
      float_from_bits(1065353216 /* 1 */), &VT[VTptr[idx[j]]], 
      slen[idx[j]], &wskel[wskeloffset[lchildren[idx[j]]]], slen[lchildren[idx[j]]], float_from_bits(0 /* 0 */), 
      &wskel[wskeloffset[idx[j]]],  slen[idx[j]]);
-     int32_t _4 = slen[idx[j]] * slen[lchildren[idx[j]]];
-     int32_t _5 = _4 + VTptr[idx[j]];
+     int32_t _6 = slen[idx[j]] * slen[lchildren[idx[j]]];
+     int32_t _7 = _6 + VTptr[idx[j]];
      cblas_dgemm(CblasColMajor, CblasNoTrans, CblasNoTrans, 
      slen[idx[j]],nrhs,slen[rchildren[idx[j]]],
-     float_from_bits(1065353216 /* 1 */), &VT[_5], 
+     float_from_bits(1065353216 /* 1 */), &VT[_7], 
      slen[idx[j]], &wskel[wskeloffset[rchildren[idx[j]]]], slen[rchildren[idx[j]]], float_from_bits(1065353216 /* 1 */), 
      &wskel[wskeloffset[idx[j]]], slen[idx[j]]);
-    } // if _3 else
+    } // if _5 else
    } // for j
   } // for k
  } // for i
- uint32_t _6 = (uint32_t)(1);
- uint32_t _7 = (uint32_t)(1023);
  #pragma omp parallel for
-for (int i = _6; i < _7; i++)
+for (int i = 0; i < 64; i++)
  {
-  uint32_t _8 = (uint32_t)(1);
-  int32_t _9 = i - _8;
-  int32_t _10 = i + _8;
-  int32_t _11 = i & 1;
-  uint32_t _12 = (uint32_t)(0);
-  bool _13 = _11 == _12;
-  int32_t _14 = (int32_t)(_13 ? _9 : _10);
-  cblas_dgemm(CblasColMajor, CblasNoTrans, CblasNoTrans, 
-  slen[i],nrhs,slen[_14],
-  _8, &B[Bptr[_9]], 
-  slen[i], &wskel[wskeloffset[_14]], slen[_14], _12, 
-  &uskel[uskeloffset[i]], slen[i]);
- } // for i
- int32_t _15 = 0 - 1;
- int32_t _16 = 5 - 1;
- for (int i = _16; i > _15; i--)
- {
-  int32_t _17 = i + 1;
-    #pragma omp parallel for
-for (int k = clevelset[i]; k < clevelset[_17]; k++)
+  int32_t _8 = i + 1;
+  for (int j = fblockSet[i]; j < fblockSet[_8]; j++)
   {
-   int32_t _18 = wpart[k] - 1;
-   int32_t _19 = k + 1;
-   int32_t _20 = wpart[_19] - 1;
-   for (int j = _20; j > _18; j--)
+   int32_t _9 = j + 1;
+   for (int k = fblocks[j]; k < fblocks[_9]; k++)
    {
-    int32_t _21 = (int32_t)(4294967295);
-    bool _22 = lchildren[idx[j]] == _21;
-    if (_22)
+    cblas_dgemm(CblasColMajor, CblasNoTrans, CblasNoTrans, 
+    slen[fpairx[k]],nrhs,slen[fpairy[k]],
+    float_from_bits(1065353216 /* 1 */), &B[Bptr[k]], 
+    slen[fpairx[k]], &wskel[wskeloffset[fpairy[k]]], slen[fpairy[k]], float_from_bits(1065353216 /* 1 */), 
+    &uskel[uskeloffset[fpairx[k]]],  slen[fpairx[k]]);
+   } // for k
+  } // for j
+ } // for i
+ int32_t _10 = 0 - 1;
+ int32_t _11 = 4 - 1;
+ for (int i = _11; i > _10; i--)
+ {
+  int32_t _12 = i + 1;
+    #pragma omp parallel for
+for (int k = clevelset[i]; k < clevelset[_12]; k++)
+  {
+   int32_t _13 = wpart[k] - 1;
+   int32_t _14 = k + 1;
+   int32_t _15 = wpart[_14] - 1;
+   for (int j = _15; j > _13; j--)
+   {
+    int32_t _16 = (int32_t)(4294967295);
+    bool _17 = lchildren[idx[j]] == _16;
+    if (_17)
     {
      cblas_dgemm(CblasColMajor, CblasTrans, CblasNoTrans, 
      Ddim[lm[idx[j]]],nrhs,slen[idx[j]],
      float_from_bits(1065353216 /* 1 */), &VT[VTptr[idx[j]]], 
      slen[idx[j]], &uskel[uskeloffset[idx[j]]], slen[idx[j]], float_from_bits(1065353216 /* 1 */), 
-     &apres[uptr[lm[idx[j]]]],  Ddim[lm[idx[j]]]);
-    } // if _22
+     &apres[uptr[lm[idx[j]]]], Ddim[lm[idx[j]]]);
+    } // if _17
     else
     {
      cblas_dgemm(CblasColMajor, CblasTrans, CblasNoTrans, 
@@ -216,14 +223,14 @@ for (int k = clevelset[i]; k < clevelset[_17]; k++)
      float_from_bits(1065353216 /* 1 */), &VT[VTptr[idx[j]]], 
      slen[idx[j]], &uskel[uskeloffset[idx[j]]], slen[idx[j]], float_from_bits(1065353216 /* 1 */), 
      &uskel[uskeloffset[lchildren[idx[j]]]],  slen[lchildren[idx[j]]]);
-     int32_t _23 = slen[idx[j]] * slen[lchildren[idx[j]]];
-     int32_t _24 = _23 + VTptr[idx[j]];
+     int32_t _18 = slen[idx[j]] * slen[lchildren[idx[j]]];
+     int32_t _19 = _18 + VTptr[idx[j]];
      cblas_dgemm(CblasColMajor, CblasTrans, CblasNoTrans, 
      slen[rchildren[idx[j]]],nrhs,slen[idx[j]],
-     float_from_bits(1065353216 /* 1 */), &VT[_24], 
+     float_from_bits(1065353216 /* 1 */), &VT[_19], 
      slen[idx[j]], &uskel[uskeloffset[idx[j]]], slen[idx[j]], float_from_bits(1065353216 /* 1 */), 
      &uskel[uskeloffset[rchildren[idx[j]]]],  slen[rchildren[idx[j]]]);
-    } // if _22 else
+    } // if _17 else
    } // for j
   } // for k
  } // for i
