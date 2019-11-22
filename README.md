@@ -1,11 +1,43 @@
 # MatRox
-MatRox is a code generator for generating HMatrix-matrix multiplication code, built on top of Sympiler.
+MatRox is a code generator for generating efficient parallel HMatrix-matrix multiplication code, built on top of Sympiler.
+
+
+
+## PPOPP'20 Artifact Description
+The facilitate the replication of graphs in the PPoPP paper, some scripts are provided that will generate graphs of the paper on the two testbed architectures i.e., Hasewell and KNL nodes. Since the memory requirement for running all datasets are high and it is hard to find a local machine with that specification,  We provide login information to XSEDE Comet and Stampede2 servers to ensure all reviewers can run all datasets.
+
+To reproduce graphs on Hasewell which include figures 4, 5, 9, and 10:
+```
+ssh XXXX@comet.sdsc.edu
+#enter the provided password
+git clone https://github.com/kobeliu85/MatRox_RU.git 
+cd MatRox_RU
+bash replicate_ppopp20.sh 1
+
+```
+
+To replicate the scalability figure on a KNL node, follow instructions below:
+```
+ssh XXXX@stampede2.tacc.utexas.edu
+#enter the provided password
+#enter the provided 6-digit code
+cd $WORK
+git clone https://github.com/kobeliu85/MatRox_RU.git 
+cd MatRox_RU
+bash replicate_ppopp20.sh 2
+
+```
+
+After the script is finished, all graphs are available under $HOME/MatRox_RU/build/sympiler/ and $WORK/MatRox_RU/build/sympiler/ in order in Comet and Stampede2 servers. The replicate_ppopp20.sh script installs MatRox, downloads datasets, generates graph data, and finally plot graphs. All steps are commented inside the script. The instruction for plotting each graph separately is available in the Figures folder.  
+
+Similar trend should be visible in other architectures. General installation and running instructions are explained as following.  
 
 ## Installation
 
-### Library requirements
-MatRox does need external library (MKL) for building and testing the
-MatRox-generated code, Intel MKL libraries are required.
+### Software dependencies
+MatRox requires following dependencies:
+* Intel MKL BLAS: for building the MatRox generated code.
+* Intel C++ compiler: For compiling MatRox and also MatRox generated code.
 
 
 ### Setup
@@ -32,7 +64,7 @@ cd sympiler
 make
 ```
 ### Scripts
-Please copy all scripts in this folder to MatRox_RU/build/sympiler/ to run the tests. You should go to MatRox_RU/build/sympiler/ to run the scripts
+Copy all scripts in this folder to MatRox_RU/build/sympiler/ to run the tests. You should go to MatRox_RU/build/sympiler/ to run the scripts
 In the KNL subfolder, there are scipts for testing MatRox, GOFMM and SMASH on KNL.
 
 The scripts for testing GOFMM, STRUMPACK and SMASH are named with letters "GO", "ST" and "SMA". The scripts for evaluating reference tools should be copied to libTest folder.
