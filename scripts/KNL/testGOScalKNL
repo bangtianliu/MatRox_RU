@@ -12,23 +12,25 @@
 # all SPD matrix files stored in dense column major format
 declare -a filearray=(
 "../data/covtype100000.points.bin"
-"../data/HIGGS100000.points.bin"
-"../data/mnist60000.points.bin"
-"../data/SUSY100000.points.bin"
-"../data/letter20000.points.bin"
-"../data/pen10992.points.bin"
-"../data/HEPMASS100000.points.bin"
-"../data/Gas13910.points.bin"
-"../data/grid102400.points.bin"
-"../data/random65536.points.bin"
-"../data/dino8w80000.points.bin"
-"../data/sunflower8w80000.points.bin"
+#"../data/HIGGS100000.points.bin"
+#"../data/mnist60000.points.bin"
+#"../data/SUSY100000.points.bin"
+#"../data/letter20000.points.bin"
+#"../data/pen10992.points.bin"
+#"../data/HEPMASS100000.points.bin"
+#"../data/Gas13910.points.bin"
+#"../data/grid102400.points.bin"
+#"../data/random65536.points.bin"
+#"../data/dino8w80000.points.bin"
+#"../data/sunflower8w80000.points.bin"
 "../data/unit32000.points.bin"
 )
 
 
-array=(54, 28, 780, 18, 16, 16, 28, 129, 2, 2, 3, 2, 2)
-dim=(100000, 100000, 60000, 100000, 20000, 10992, 100000, 13910, 102400, 65536, 80000, 80000, 32000)
+#array=(54, 28, 780, 18, 16, 16, 28, 129, 2, 2, 3, 2, 2)
+array=(54, 2)
+#dim=(100000, 100000, 60000, 100000, 20000, 10992, 100000, 13910, 102400, 65536, 80000, 80000, 32000)
+dim=(100000, 32000)
 lm=(256, 256, 256, 256, 256, 256, 128)
 rank=(256, 256, 256, 256, 128, 128)
 
@@ -54,7 +56,7 @@ nrhs=2048
 stol=1e-5
 #lim=$[$n/2]
 ## user computation budget
-budget=${1}
+#budget=${1}
 ## distance type (geometry, kernel, angle)
 distance="geometry"
 ## spdmatrix type (testsuit, dense, kernel, userdefine)
@@ -129,28 +131,60 @@ if [[ "$matrixtype" == "kernel" ]] ; then
 
     let i++
   done
+  i=0
+  for filename in "${filearray[@]}"
+
+  do
+    d=${array[$i]}
+  n=${dim[$i]}
+  s=256
+  m=256
+  budget=0.03
+  #s=${rank[$i]}
+  #m=${lm[$i]}
+
+      echo "#s=$s"
+      echo "#n=$n"
+
+      for j in  1 2 4 8 17 34 68
+      do
+        export OMP_NUM_THREADS=${j}
+        $mpiexec $executable $n $m $k $s $nrhs $stol $budget $distance $matrixtype $filename $d $h | tee -a gofmmout; status=$?
+      done
+    echo "@STATUS"
+    echo $status
+
+    let i++
+  done
+
+
+
 fi
 
 
 grep "Eval" gofmmout | grep -Eo '[+-]?[0-9]+([.][0-9]+)?' | awk 'NR%2==1' > eval.csv
 
-awk -F "\"*,\"*" '{print $1}' eval.csv | xargs -n12 -d'\n' > tgoscal.csv
+awk -F "\"*,\"*" '{print $1}' eval.csv | xargs -n7 -d'\n' > tgoscal.csv
+
 
 declare -a tfilearray=(
-"covtype"
-"higgs"
-"mnist"
-"susy"
-"letter"
-"pen"
-"hepmass"
-"gas"
-"grid"
-"random"
-"dino"
-"sunflower"
-"unit"
+"covtype-hss"
+#"higgs"
+#"mnist"
+#"susy"
+#"letter"
+#"pen"
+#"hepmass"
+#"gas"
+#"grid"
+#"random"
+#"dino"
+#"sunflower"
+"unit-hss"
+"covtype-h2b"
+"unit-h2b"
 )
+
 
 rm data.csv
 for filename in "${tfilearray[@]}"
@@ -158,10 +192,6 @@ do
   echo "$filename," >> data.csv
 done
 
-if [[ $budget -eq 0 ]]
-then
-  paste data.csv tgoscal.csv > gohssscal_knl.csv
-else
-  paste data.csv tgoscal.csv > goh2scal_knl.csv
-fi
+paste data.csv tgoscal.csv > goscalknl.csv
+
 rm tgoscal.csv

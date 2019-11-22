@@ -13,9 +13,9 @@
 
 ## all SPD matrix files stored in dense column major format
 declare -a filearray=(
-"../data/letter20000.points.bin"
-"../data/pen10992.points.bin"
-"../data/Gas13910.points.bin"
+#"../data/letter20000.points.bin"
+#"../data/pen10992.points.bin"
+#"../data/Gas13910.points.bin"
 "../data/unit32000.points.bin"
 )
 
@@ -51,9 +51,9 @@ grep "Evaluation time" stout | grep -Eo '[0-9]*+[.]+[0-9]*' > eval.csv
 awk -F "\"*,\"*" '{print $1}' eval.csv | xargs -n7 -d'\n' > tstscal.csv
 
 declare -a tfilearray=(
-"letter"
-"pen"
-"gas"
+#"letter"
+#"pen"
+#"gas"
 "unit"
 )
 
@@ -63,6 +63,6 @@ do
   echo "$filename," >> data.csv
 done
 
-paste data.csv tstscal.csv > stscal_knl.csv
+paste data.csv tstscal.csv > stscalknl.csv
 
 rm tstscal.csv
