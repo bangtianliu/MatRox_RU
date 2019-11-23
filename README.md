@@ -70,7 +70,7 @@ wget -O ../../data/Points.zip https://www.dropbox.com/sh/ab7f8gut3nh22ym/AAA0QXr
 unzip ../../data/Points.zip -d ../../data/
 ```
 
-Since some of used dataset is too large for local machine, we also provide 5 small datasets, i.e., covtype16384.points.bin, mnist16384.points.bin, SUSY16384.points.bin, HIGGS16384.points.bin and HEPMASS16384.points.bin, which can be executed locally (using testsmallpoints script).
+Since some of used dataset is too large for local machine, we also provide 5 small datasets, i.e., (covtype, mnist, SUSY, HIGGS, HEPMASS)16384.points.bin, which can be executed locally (using testsmallpoints script).
 
 ### Evaluating MatRox
 After build is done successfully, the following scripts can be used
