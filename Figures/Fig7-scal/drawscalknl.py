@@ -1,4 +1,6 @@
 import sys
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 import csv
@@ -36,7 +38,7 @@ def main(filename, gfilename, sfilename):
     s[0,:] = s[0,0] / s[0,:]
 
 
-    print(a)
+    #print(a)
     threads = np.array([1, 2, 4, 8, 17, 34, 68])
     plt.plot(threads, a[0,:], 'b->', label='MatRox-HSS')
     plt.plot(threads, g[0,:], 'r-o', label='GOFMM-HSS')
@@ -52,7 +54,8 @@ def main(filename, gfilename, sfilename):
     # plt.xscale('log')
 
     plt.savefig('knlscalcovtype.eps', format='eps')
-    plt.show()
+    plt.close()
+    #plt.show()
     plt.plot(threads, a[1, :], 'b->', label='MatRox-HSS')
     plt.plot(threads, g[1, :], 'r-o', label='GOFMM-HSS')
     plt.plot(threads, s[0, :], 'g-x', label='STRUMPACK-HSS')
@@ -73,7 +76,7 @@ def main(filename, gfilename, sfilename):
     plt.xticks(threads)
 
     plt.savefig('knlscalunit.eps', format='eps')
-    plt.show()
+    #plt.show()
     # print(data.ix[:,0])
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

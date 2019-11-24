@@ -91,7 +91,7 @@ def main(filename, gfilename):
     plt.ylim([0, 4.0])
     plt.xlim(-1,26)
     plt.savefig('matnrun.eps', format='eps')
-    plt.show()
+    #plt.show()
     #print(matinp2)
 
 

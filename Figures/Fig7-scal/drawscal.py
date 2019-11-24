@@ -1,4 +1,6 @@
 import sys
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 import csv
@@ -11,7 +13,7 @@ def main(filename, gfilename, sfilename, safilename):
     sdata = pd.read_csv(sfilename, sep=' ', header=None)
     sadata = pd.read_csv(safilename, sep=' |,', header=None)
 
-    print(gdata)
+    #print(gdata)
 
     filterdata = 'covtype,\thiggs,\tmnist,\tsusy,\tletter,\trandom,\t,flower,\t-h2\t'
     # data.ix[:,0] = data.ix[:,0].map(lambda x:x.lstrip(filterdata) )
@@ -21,7 +23,7 @@ def main(filename, gfilename, sfilename, safilename):
 
 
     sdata.ix[:,0] = sdata.ix[:,0].map(lambda x:x.lstrip(filterdata) )
-    print(sdata)
+    #print(sdata)
 
     a = np.array(data)
     a = a.astype(np.float)
@@ -41,7 +43,7 @@ def main(filename, gfilename, sfilename, safilename):
     sa = sa.astype(np.float)
     sa[0,:] = sa[0,0] / sa[0,:]
 
-    print(a)
+    #print(a)
     threads = np.arange(1, 13, 1)
     plt.plot(threads, a[0,:], 'b->', label='MatRox-HSS')
     plt.plot(threads, g[0,:], 'r-o', label='GOFMM-HSS')
@@ -56,7 +58,8 @@ def main(filename, gfilename, sfilename, safilename):
     plt.xlabel('Number of cores')
 
     plt.savefig('scalcovtype.eps', format='eps')
-    plt.show()
+    plt.close()
+    #plt.show()
 
     plt.plot(threads, a[1, :], 'b->', label='MatRox-HSS')
     plt.plot(threads, g[1, :], 'r-o', label='GOFMM-HSS')
@@ -69,7 +72,7 @@ def main(filename, gfilename, sfilename, safilename):
     #
     # print(a[3,:])
     #
-    plt.legend(loc='best', frameon=False)
+    plt.legend(loc='best', frameon=False, fontsize=14)
     plt.title('unit(Haswell)')
     plt.ylim(0, 12.5)
     plt.xticks(threads)
@@ -77,7 +80,7 @@ def main(filename, gfilename, sfilename, safilename):
     plt.xlabel('Number of cores')
 
     plt.savefig('scalunit.eps', format='eps')
-    plt.show()
+    #plt.show()
 
     # print(data.ix[:,0])
 if __name__ == '__main__':
