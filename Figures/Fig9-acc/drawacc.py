@@ -1,4 +1,6 @@
 import numpy as np
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import csv
 import os
@@ -8,7 +10,6 @@ import pandas as pd
 import argparse
 
 def main(filename):
-    x=np.arange(1,14,1.0)
     data=['covtype','higgs', 'mnist', 'susy', 'letter', 'pen', 'hepmass', 'gas', 'grid', 'random', 'dino', 'sunflower', 'unit']
 
     adata= pd.read_csv(filename, sep=' ', header=None)
@@ -24,6 +25,7 @@ def main(filename):
     e3=adata[:,2]
     e4=adata[:,3]
     e5=adata[:,4]
+    x=np.arange(1,14,1.0)
 
     plt.figure()
     plt.plot(x,e1,marker="*",label="bacc=1e-1")
@@ -41,9 +43,9 @@ def main(filename):
     plt.axhline(y=1e-5,linestyle='--',linewidth=0.5)
     plt.axhline(y=1e-6,linestyle='--',linewidth=0.5)
     plt.axhline(y=1e-7,linestyle='--',linewidth=0.5)
-    plt.legend(frameon=False)
+    plt.legend(frameon=False, fontsize=14)
     plt.savefig('acc.eps', format='eps')
-    plt.show()
+    #plt.show()
 
 if __name__ == '__main__':
 #     filename = '/home/labuser/Dropbox/H2MATRICES/PPOPP/matrox/acc.csv'

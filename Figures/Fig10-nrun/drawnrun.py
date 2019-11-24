@@ -1,4 +1,6 @@
 import sys
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 import csv
@@ -15,15 +17,15 @@ def main(filename, gfilename):
     gdata.ix[:, 0] = gdata.ix[:, 0].map(lambda x: x.lstrip(filterdata))
     gdata = gdata.as_matrix()
     gdata = gdata[:,1:3]
-    print(gdata)
+    #print(gdata)
 
     # gdata.ix[:,2] =gdata.ix[:,2].map(lambda x: x.rstrip(','))
     data = data.ix[:,1:4]
-    print(data)
-    print(data.as_matrix())
+    #print(data)
+    #print(data.as_matrix())
     a = np.array(data)
     a = a.astype(np.float)
-    print(a.sum(axis=1))
+    #print(a.sum(axis=1))
     total= a.sum(axis=1)
     a = a.transpose()
     matinp1 = a[0, :]/total
@@ -83,13 +85,14 @@ def main(filename, gfilename):
                           linewidth=line_width,
                           label='GOFMM-evaluation')
     #     plt.legend(bbox_to_anchor=(1.6, 1.05))
-    plt.legend(frameon=False)
-    plt.xticks((neg_bar_positions + pos_bar_positions) / 2, data, rotation=45, fontsize=7)
+    plt.legend(frameon=False, fontsize=14)
+    plt.xticks((neg_bar_positions + pos_bar_positions) / 2, data, rotation=45)
     plt.ylabel('Normalized execution time')
     plt.ylim([0, 4.0])
+    plt.xlim(-1,26)
     plt.savefig('matnrun.eps', format='eps')
     plt.show()
-    print(matinp2)
+    #print(matinp2)
 
 
 if __name__ == '__main__':

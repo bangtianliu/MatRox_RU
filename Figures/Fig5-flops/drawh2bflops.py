@@ -1,4 +1,6 @@
 import sys
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 import csv
@@ -29,7 +31,7 @@ def main(filename, gfilename):
     matcoar = (a[:,5]-a[:,3])/1e+9
     matlow = (a[:,7]-a[:,5])/1e+9
 
-    print(matseq)
+    #print(matseq)
     goseq = a[:,0]/g[:,0]
     goseq = goseq/1e+9
     gopar = a[:,0]/g[:,1]
@@ -95,12 +97,13 @@ def main(filename, gfilename):
 
 #
 #     plt.legend(bbox_to_anchor=(1.1, 1.05))
-    plt.legend(frameon=False)
+    plt.legend(frameon=False, fontsize=14)
     plt.ylim(0,800)
-    plt.xticks((neg_bar_positions+pos_bar_positions)/2, data, rotation=45, fontsize=7)
+    plt.xlim(-1,26)
+    plt.xticks((neg_bar_positions+pos_bar_positions)/2, data, rotation=45)
     plt.ylabel('GFLOPS/s')
     plt.savefig('h2-separate.eps', format='eps')
-    plt.show()
+    #plt.show()
 #     print(matseq)
 #     print(matcoar)
 if __name__ == '__main__':

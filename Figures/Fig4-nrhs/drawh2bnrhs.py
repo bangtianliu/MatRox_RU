@@ -1,4 +1,6 @@
 import sys
+import matplotlib 
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 import csv
@@ -36,8 +38,8 @@ def main(filename, gfilename):
     # print(ind)
     a=data[indx,:]
     g=g[indx,:]
-    print(g)
-    print(data[indx, :])
+ #   print(g)
+ #   print(data[indx, :])
 
     a = a.transpose()
     g = g.transpose()
@@ -110,12 +112,13 @@ def main(filename, gfilename):
 
     #
     # #     plt.legend(bbox_to_anchor=(1.6, 1.05))
-    plt.legend(frameon=False)
+    plt.legend(frameon=False, fontsize=14)
+    plt.xlim(-2, 34)
     # plt.ylim(0, 40)
     plt.xticks((neg_bar_positions + pos_bar_positions) / 2, data, rotation=45, fontsize=7)
     plt.ylabel('Time (seconds)')
     plt.savefig('h2nrhs.eps', format='eps')
-    plt.show()
+    #plt.show()
     # print(a[0, :])
 
 

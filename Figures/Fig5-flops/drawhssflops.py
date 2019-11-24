@@ -1,4 +1,6 @@
 import sys
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 import csv
@@ -34,7 +36,7 @@ def main(filename, gfilename, sfilename):
     # ind = [4, 5, 7, 12]
     # print(a[ind,0])
     # print(a[ind,0]/s[:,0])
-    print('test')
+    #print('test')
     stseq[4,0] = a[4,0]/s[0,0]
     stseq[5,0] = a[5,0]/s[1,0]
     stseq[7, 0] = a[7, 0] / s[2, 0]
@@ -49,9 +51,9 @@ def main(filename, gfilename, sfilename):
     # print(s[0,0])
 
     stseq = stseq.transpose()
-    print(stseq)
+    #print(stseq)
     stpar =stpar.transpose()
-    print(stpar)
+    #print(stpar)
     # print(g)
     # print(a[:,1])
     #
@@ -60,12 +62,12 @@ def main(filename, gfilename, sfilename):
     matcoar = (a[:,3]-a[:,1])/1e+9
     matlow = (a[:,5]-a[:,3])/1e+9
 
-    print(matseq)
+    #print(matseq)
     goseq = a[:,0]/g[:,0]
     goseq = goseq/1e+9
     gopar = a[:,0]/g[:,1]
     gopar = gopar/1e+9
-    print(goseq)
+    #print(goseq)
     # matlow = a[2,:]
     # goseq = a[3,:]
     # gocoar = a[4,:]
@@ -133,12 +135,13 @@ def main(filename, gfilename, sfilename):
                          )
 #
 #     plt.legend(bbox_to_anchor=(1.1, 1.05))
-    plt.legend(frameon=False)
+    plt.legend(frameon=False, fontsize=14)
     plt.ylim(0,800)
-    plt.xticks((neg_bar_positions+pos_bar_positions)/2, data, rotation=45, fontsize=7)
+    plt.xlim(-1,26)
+    plt.xticks((neg_bar_positions+pos_bar_positions)/2, data, rotation=45)
     plt.ylabel('GFLOPS/s')
     plt.savefig('hss-separate.eps', format='eps')
-    plt.show()
+    #plt.show()
 #     print(matseq)
 #     print(matcoar)
 if __name__ == '__main__':

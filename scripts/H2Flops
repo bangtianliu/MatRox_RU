@@ -76,7 +76,7 @@ executable=./sympiler_proj
   done
   mv ../codeTest/runtest.csv ./
 
-  awk -F "\"*,\"*" '{print $1}' runtest.csv | xargs -n4 -d'\n' > flops1.csv
+  awk -F "\"*,\"*" '{print $1, $2}' runtest.csv | xargs -n4 -d'\n' > flops1.csv
   bash datash1
   paste data.csv flops1.csv > h2flops.csv
   rm flops1.csv

@@ -1,4 +1,6 @@
 import sys
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 import csv
@@ -10,6 +12,7 @@ def main(filename, gfilename,sfilename):
     data = pd.read_csv(filename, sep=',', header=None)
     gdata = pd.read_csv(gfilename, sep='\t', header=None)
     sdata = pd.read_csv(sfilename, sep='\t', header=None)
+    
 
     filterdata = 'covtype,\thiggs,\tmnist,\tsusy,\tletter,\trandom,\t,flower,\t'
     data.ix[:,0] = data.ix[:,0].map(lambda x:x.lstrip(filterdata) )
@@ -19,7 +22,7 @@ def main(filename, gfilename,sfilename):
     sdata.ix[:, 0] = sdata.ix[:, 0].map(lambda x: x.lstrip(filterdata))
     sdata.ix[:, 2] = sdata.ix[:, 2].map(lambda x: x.rstrip(','))
 
-    print(sdata)
+    #print(sdata)
 
     # data.ix[:, 1] = data.ix[:, 1].map(lambda x: x.lstrip(filterdata))
     # data.ix[:, 2] = data.ix[:, 2].map(lambda x: x.lstrip(filterdata))
@@ -44,14 +47,14 @@ def main(filename, gfilename,sfilename):
     strcom[8:12] = ts[0,:]
     streval = np.zeros(16)
     streval[8:12] = ts[1,:]
-    print(strcom)
+    #print(strcom)
     indx = np.array([0, 4, 8, 12, 1, 5, 9, 13, 2, 6, 10, 14, 3, 7, 11, 15])
     # indy = np.array([0,1,2,3])
     # print(ind)
     a=data[indx,:]
     g=g[indx,:]
-    print(g)
-    print(data[indx, :])
+    #print(g)
+    #print(data[indx, :])
 
     a = a.transpose()
     g = g.transpose()
@@ -138,13 +141,14 @@ def main(filename, gfilename,sfilename):
                            )
     #
     # #     plt.legend(bbox_to_anchor=(1.6, 1.05))
-    plt.legend(frameon=False)
+    plt.legend(frameon=False, fontsize=14)
+    plt.xlim(-2,34)
     plt.ylim(0, 30)
-    plt.xticks((neg_bar_positions + pos_bar_positions) / 2, data, rotation=45, fontsize=7)
+    plt.xticks((neg_bar_positions + pos_bar_positions) / 2 , data, rotation=45, fontsize=7)
     plt.ylabel('Time (seconds)')
 
     plt.savefig('hssnrhs.eps', format='eps')
-    plt.show()
+    #plt.show()
     # print(a[0, :])
 
 
