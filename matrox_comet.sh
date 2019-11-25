@@ -24,12 +24,6 @@ export MKLROOT=/share/apps/compute/intel/intelmpi2018/compilers_and_libraries/li
 export CMAKE_CXX_COMPILER=/share/apps/compute/intel/intelmpi2018/compilers_and_libraries/linux/bin/intel64/icpc
 #export OMP=/share/apps/compute/intel/intelmpi2018/compilers_and_libraries/linux/lib/intel64/
 fi
-if [ $cometORknl -eq 2 ]; then
-module load intel/18.0.2
-export MKLROOT=/opt/intel/compilers_and_libraries_2018.2.199/linux/mkl/  #TODO
-export CMAKE_CXX_COMPILER=/opt/intel/compilers_and_libraries_2018.2.199/linux/bin/intel64/icpc #TODO
-#export OMP=/share/apps/compute/intel/intelmpi2018/compilers_and_libraries/linux/lib/intel64/
-fi
 
 MatRox_HOME=$(pwd)
 MatRox_build=${MatRox_HOME}/build/sympiler/
@@ -37,7 +31,7 @@ MatRox_Lib=${MatRox_HOME}/libTest/
 MatRox_Fig=${MatRox_HOME}/Figures/
 
 ### Installing MatRox
-#mkdir build
+mkdir build
 cd build
 cmake ..
 cd sympiler

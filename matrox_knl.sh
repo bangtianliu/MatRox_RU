@@ -12,8 +12,8 @@
 
 module cmake
 module load intel/18.0.2
-export MKLROOT=/opt/intel/compilers_and_libraries_2018.2.199/linux/mkl/  #TODO
-export CMAKE_CXX_COMPILER=/opt/intel/compilers_and_libraries_2018.2.199/linux/bin/intel64/icpc #TODO
+export MKLROOT=/opt/intel/compilers_and_libraries_2018.2.199/linux/mkl/ 
+export CMAKE_CXX_COMPILER=/opt/intel/compilers_and_libraries_2018.2.199/linux/bin/intel64/icpc
 
 
 MatRox_HOME=$(pwd)

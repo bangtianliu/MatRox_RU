@@ -123,7 +123,7 @@ double *apres, int32_t nrhs, int32_t *Ddim, int32_t *wptr, int32_t *uptr, double
 int32_t *slen, int32_t *nblockSet, int32_t *nblocks, int32_t *npairx, int32_t *npairy, int32_t *fblockSet, int32_t *fblocks, int32_t *fpairx, int32_t *fpairy, int32_t *wpart, 
 int32_t *clevelset) {
  #pragma omp parallel for
-for (int i = 0; i < 64; i++)
+for (int i = 0; i < 256; i++)
  {
   int32_t _0 = i + 1;
   for (int j = nblockSet[i]; j < nblockSet[_0]; j++)
@@ -135,11 +135,11 @@ for (int i = 0; i < 64; i++)
     Ddim[npairx[k]],nrhs,Ddim[npairy[k]],
     float_from_bits(1065353216 /* 1 */), &D[Dptr[k]], 
     Ddim[npairx[k]], &mrhs[wptr[npairy[k]]], Ddim[npairy[k]], float_from_bits(1065353216 /* 1 */), 
-    &apres[uptr[npairx[k]]],  Ddim[npairx[k]]);
+    &apres[uptr[npairx[k]]], Ddim[npairx[k]]);
    } // for k
   } // for j
  } // for i
- for (int i = 0; i < 4; i++)
+ for (int i = 0; i < 5; i++)
  {
   int32_t _2 = i + 1;
     #pragma omp parallel for
@@ -156,7 +156,7 @@ for (int k = clevelset[i]; k < clevelset[_2]; k++)
      slen[idx[j]],nrhs,Ddim[lm[idx[j]]],
      float_from_bits(1065353216 /* 1 */), &VT[VTptr[idx[j]]], 
      slen[idx[j]], &mrhs[wptr[lm[idx[j]]]], Ddim[lm[idx[j]]], float_from_bits(0 /* 0 */), 
-     &wskel[wskeloffset[idx[j]]],  slen[idx[j]]);
+     &wskel[wskeloffset[idx[j]]], slen[idx[j]]);
     } // if _5
     else
     {
@@ -164,7 +164,7 @@ for (int k = clevelset[i]; k < clevelset[_2]; k++)
      slen[idx[j]],nrhs,slen[lchildren[idx[j]]],
      float_from_bits(1065353216 /* 1 */), &VT[VTptr[idx[j]]], 
      slen[idx[j]], &wskel[wskeloffset[lchildren[idx[j]]]], slen[lchildren[idx[j]]], float_from_bits(0 /* 0 */), 
-     &wskel[wskeloffset[idx[j]]],  slen[idx[j]]);
+     &wskel[wskeloffset[idx[j]]], slen[idx[j]]);
      int32_t _6 = slen[idx[j]] * slen[lchildren[idx[j]]];
      int32_t _7 = _6 + VTptr[idx[j]];
      cblas_dgemm(CblasColMajor, CblasNoTrans, CblasNoTrans, 
@@ -177,7 +177,7 @@ for (int k = clevelset[i]; k < clevelset[_2]; k++)
   } // for k
  } // for i
  #pragma omp parallel for
-for (int i = 0; i < 64; i++)
+for (int i = 0; i < 256; i++)
  {
   int32_t _8 = i + 1;
   for (int j = fblockSet[i]; j < fblockSet[_8]; j++)
@@ -194,7 +194,7 @@ for (int i = 0; i < 64; i++)
   } // for j
  } // for i
  int32_t _10 = 0 - 1;
- int32_t _11 = 4 - 1;
+ int32_t _11 = 5 - 1;
  for (int i = _11; i > _10; i--)
  {
   int32_t _12 = i + 1;
@@ -222,7 +222,7 @@ for (int k = clevelset[i]; k < clevelset[_12]; k++)
      slen[lchildren[idx[j]]],nrhs,slen[idx[j]],
      float_from_bits(1065353216 /* 1 */), &VT[VTptr[idx[j]]], 
      slen[idx[j]], &uskel[uskeloffset[idx[j]]], slen[idx[j]], float_from_bits(1065353216 /* 1 */), 
-     &uskel[uskeloffset[lchildren[idx[j]]]],  slen[lchildren[idx[j]]]);
+     &uskel[uskeloffset[lchildren[idx[j]]]], slen[lchildren[idx[j]]]);
      int32_t _18 = slen[idx[j]] * slen[lchildren[idx[j]]];
      int32_t _19 = _18 + VTptr[idx[j]];
      cblas_dgemm(CblasColMajor, CblasTrans, CblasNoTrans, 
