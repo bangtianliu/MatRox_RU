@@ -8,11 +8,14 @@ MatRox requires Intel C++ compiler and Intel MKL library as software dependencie
 Meeting software dependencies, MatRox can run in any architecture. However, for running all datasets in the PPoPP20 paper, a machine with at least 40GB of RAM is required. 
 
 ### Replicating Graphs
-The facilitate the replication of graphs in the PPoPP paper, some scripts are provided that will generate graphs of the paper on the two testbed architectures i.e., Hasewell and KNL nodes. Since the memory requirement for running all datasets are high and it is hard to find a local machine with that specification,  We provide login information to XSEDE Comet and Stampede2 servers to ensure all reviewers can run all datasets conveniently.
+The facilitate the replication of graphs in the PPoPP paper, some scripts are provided that will generate graphs of the paper on the two testbed architectures i.e., Hasewell and KNL nodes. Since the memory requirement for running all datasets is more than 40GB, and it is hard to find a local machine with that requirement, we setup MatRox code on two XSEDE servers, i.e., Comet and Stampede2. 
+For Library codes, binaries are provided for all libraries, i.e., GOFMM, STRUMPACK, and SMASH. The source code and the driver code for GOFMM and STRUMPACK are included in the libTest folder as two separate zip files. The SMASH code is not public, so only its binary is provided. 
 
-To reproduce graphs on Hasewell which include figures 4, 5, 9, and 10:
+ ** Note to reviewers: if you do not have access to XSEDE servers, we can provide temporary login information to XSEDE Comet and Stampede2 servers to ensure you can run all datasets conveniently. Please coordinate this through Hotcrp. 
+
+To reproduce graphs on Hasewell which include figures 4, 5, 7 (upper part), 9, and 10:
 ```
-ssh XXXX@comet.sdsc.edu
+ssh username@comet.sdsc.edu
 #enter the provided password
 git clone https://github.com/kobeliu85/MatRox_RU.git 
 cd MatRox_RU
@@ -20,10 +23,10 @@ bash replicate_ppopp20.sh 1
 
 ```
 
-To replicate the scalability figure on a KNL node, follow instructions below:
+To replicate the scalability figure, i.e., lower part of figure 7, on a KNL node, follow instructions below:
 ```
-ssh XXXX@stampede2.tacc.utexas.edu
-#enter the provided password
+ssh username@stampede2.tacc.utexas.edu
+#enter the provided password 
 #enter the provided 6-digit code
 cd $WORK
 git clone https://github.com/kobeliu85/MatRox_RU.git 
@@ -32,7 +35,7 @@ bash replicate_ppopp20.sh 2
 
 ```
 
-After the script is finished, all graphs are available under $HOME/MatRox_RU/build/sympiler/ and $WORK/MatRox_RU/build/sympiler/ in order in Comet and Stampede2 servers. The replicate_ppopp20.sh script installs MatRox, downloads datasets, generates graph data, and finally plot graphs. All steps are commented inside the script. The instruction for plotting each graph separately is available in the Figures folder.  
+After the script is finished, all graphs are available under $HOME/MatRox_RU/Figures/ and $WORK/MatRox_RU/Figures/ in order in Comet and Stampede2 servers. Figures are stored under the directory of the figure number. The replicate_ppopp20.sh script installs MatRox, downloads datasets, generates graph data, and finally plot graphs. All steps are commented inside the script. The instruction for plotting each graph separately is available in the Figures folder.  
 
 Similar trend should be visible in other architectures. General installation and running instructions are explained as following.  
 
@@ -79,9 +82,9 @@ to evaluate MatRox and MatRox-generated code for given datasets.
 #### Show the performance and accuracy
 ```bash
 cd build/sympiler/
-#HSS local: example command 2
+#HSS : 
 bash testMatRox 0
-#H2-b local: example command 4
+#H2-b : you will need a minimum of 40 GB to run this script
 bash testMatRox 0.03
 ```
 The result could be found in res.csv
