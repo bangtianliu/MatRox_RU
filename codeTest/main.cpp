@@ -198,9 +198,8 @@ int main(int argc, char *argv[])
 	end = omp_get_wtime();
 
 	auto eval = end-start;
-	std::cout<<flops/eval<<"\n";
+	std::cout<<flops<<","<<flops/eval<<"\n";
 	int d=dim;
 	double acc1=computeError(tree.lids, tree.Dim[0],nrhs,n,X,d,W,U);
 //	printf(",%e\n",acc1);
 }
-
