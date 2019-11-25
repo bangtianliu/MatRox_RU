@@ -25,4 +25,9 @@ else
 	sbatch matrox_knl.sh
 fi
 
-echo "The generated csv and eps files are found in Figures folder"
+
+MatRox_HOME=$(pwd)
+MatRox_Fig=${MatRox_HOME}/Figures/
+
+
+echo "The generated csv and eps files will be available under ${MatRox_Fig} upon the successful completion ofscripts."

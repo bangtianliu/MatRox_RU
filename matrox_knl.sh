@@ -24,7 +24,7 @@ MatRox_Fig=${MatRox_HOME}/Figures/
 
 
 ### Installing MatRox
-#mkdir build
+mkdir build
 cd build
 cmake ..
 cd sympiler
@@ -43,7 +43,7 @@ cp stscalknl.csv ../../Figures/Fig7-scal/
 
 
 ### the csv files should be copied to local machine and using follow command to draw figures. 
-echo "please copy figures to local machine and draw figures"
+echo "please copy figures to local machine and draw figures by using following instruction"
 # cd ../Figures/Fig7-scal/
 # python drawscalknl.py --m scalknl.csv --g goscalknl.csv --s stscalknl.csv
 
