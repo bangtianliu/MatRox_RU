@@ -1,13 +1,13 @@
 #!/bin/bash
 #SBATCH -A ucb191
 #SBATCH --job-name="PPoPP_artifact"
-#SBATCH --output="ml.%j.%N.out"
+#SBATCH --output="ppopp.%j.%N.out"
 #SBATCH --partition=compute
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --mem=120G
 #SBATCH --export=ALL
-#SBATCH -t 2:00:00
+#SBATCH -t 12:00:00
 
 module load cmake
 cometORknl=1  # Comet is 1, KNL is 2

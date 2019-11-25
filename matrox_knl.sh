@@ -42,5 +42,8 @@ bash testSTScal
 cp stscalknl.csv ../../Figures/Fig7-scal/
 
 
-cd ../Figures/Fig7-scal/
-python drawscalknl.py --m scalknl.csv --g goscalknl.csv --s stscalknl.csv
+### the csv files should be copied to local machine and using follow command to draw figures. 
+echo "please copy figures to local machine and draw figures"
+# cd ../Figures/Fig7-scal/
+# python drawscalknl.py --m scalknl.csv --g goscalknl.csv --s stscalknl.csv
+
