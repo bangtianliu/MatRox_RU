@@ -2,7 +2,7 @@
 
 ### Downloading dataset (If the data folder and 
 ### sunflower8w80000.points.bin are created, it skips downloading the dataset.)
-if [ ! -d "data/" ] && [! -f "data/sunflower8w80000.points.bin"]; then
+if  [ ! -f "data/sunflower8w80000.points.bin" ]; then
  mkdir ./data
  echo "Downloading point sets ..."
  wget -O ./data/Points.zip https://www.dropbox.com/sh/ab7f8gut3nh22ym/AAA0QXrC3kS0L4iHS2T0kpg-a?dl=0
