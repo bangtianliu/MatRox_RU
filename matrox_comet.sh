@@ -47,8 +47,8 @@ cp ../../scripts/* ${MatRox_Lib}/
 ##run MatRox
 cd ${MatRox_build}
 # HSS MatROx
-bash nrhssh  0.0;
-cp hssnrhs.csv ../../Figures/Fig4-nrhs/;
+bash nrhssh  0.0
+cp hssnrhs.csv ../../Figures/Fig4-nrhs/
 ## H2-b MatRox
 bash nrhssh 0.03
 cp h2nrhs.csv ../../Figures/Fig4-nrhs/
