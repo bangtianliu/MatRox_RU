@@ -124,7 +124,7 @@ cp stscal.csv ../Figures/Fig7-scal/
 ## SMASH
 bash testSMAScal
 cp smascal.csv ../Figures/Fig7-scal/
-cd {MatRox_Fig}/Fig7-scal/
+cd ${MatRox_Fig}/Fig7-scal/
 
 ## Figure 7-scalability on comet
 python drawscal.py --m scal.csv --g goscal.csv --s stscal.csv --sa smascal.csv
