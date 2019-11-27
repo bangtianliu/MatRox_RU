@@ -32,14 +32,16 @@ make
 
 
 cp ../../scripts/KNL/testScalKNL ./
+cp ../../scripts/KNL/* ${MatRox_Lib}/
+
 # Figure 7
 bash testScalKNL
 cp scalknl.csv ../../Figures/Fig7-scal/
 cd ../../libTest/
-bash testGOScal
-cp goscalknl.csv ../../Figures/Fig7-scal/
-bash testSTScal
-cp stscalknl.csv ../../Figures/Fig7-scal/
+bash testGOScalKNL
+cp goscalknl.csv ../Figures/Fig7-scal/
+bash testSTScalKNL
+cp stscalknl.csv ../Figures/Fig7-scal/
 
 
 ### the csv files should be copied to local machine and using follow command to draw figures. 
