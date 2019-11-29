@@ -1,17 +1,18 @@
 # MatRox
 MatRox is a code generator for generating efficient parallel HMatrix-matrix multiplication code, built on top of Sympiler.
 
+The Readme file is created in two sections, artifact for PPoPP'20 paper titled MatRox: Modular approach for improving data locality in Hierarchical (Mat)rix App(Rox)imation, and general instructions for installing MatRox in a generic architecture. 
 
-## PPOPP'20 Artifact Description
+## 1. PPOPP'20 Artifact Description
 ### Software and Hardware dependencies
 MatRox requires Intel C++ compiler and Intel MKL library as software dependencies.
 Meeting software dependencies, MatRox can run in any architecture. However, for running all datasets in the PPoPP20 paper, a machine with at least 40GB of RAM is required. 
 
 ### Replicating Graphs
-The facilitate the replication of graphs in the PPoPP paper, some scripts are provided that will generate graphs of the paper on the two testbed architectures i.e., Hasewell and KNL nodes. Since the memory requirement for running all datasets is more than 40GB, and it is hard to find a local machine with that requirement, we setup MatRox code on two XSEDE servers, i.e., Comet and Stampede2. 
+To facilitate the replication of graphs of the PPoPP paper, two scripts are provided that will generate graphs of the paper on the two testbed architectures i.e., Hasewell and KNL nodes. Since the memory requirement for running all datasets is more than 40GB, and it is hard to find a local machine with that requirement, we setup MatRox code on two XSEDE servers, i.e., Comet and Stampede2. 
 For Library codes, binaries are provided for all libraries, i.e., GOFMM, STRUMPACK, and SMASH. The source code and the driver code for GOFMM and STRUMPACK are included in the libTest folder as two separate zip files. The SMASH code is not public, so only its binary is provided. 
 
- ** Note to reviewers: if you do not have access to XSEDE servers, we can provide temporary login information to XSEDE Comet and Stampede2 servers to ensure you can run all datasets conveniently. Please coordinate this through Hotcrp. 
+ **Note to reviewers:** if you do not have access to XSEDE servers, we can provide temporary login information to XSEDE Comet and Stampede2 servers to ensure you can run all datasets conveniently. Please coordinate this through Hotcrp forum. 
 
 To reproduce graphs on Hasewell which include figures 4, 5, 7 (upper part), 9, and 10:
 ```
@@ -35,11 +36,13 @@ bash replicate_ppopp20.sh 2
 
 ```
 
-After the script is finished, all graphs are available under $HOME/MatRox_RU/Figures/ and $WORK/MatRox_RU/Figures/ in order in Comet and Stampede2 servers. Figures are stored under the directory of the figure number. The replicate_ppopp20.sh script installs MatRox, downloads datasets, generates graph data, and finally plot graphs. All steps are commented inside the script. The instruction for plotting each graph separately is available in the Figures folder.  
+After the script is finished, all graphs are available under $HOME/MatRox_RU/Figures/ ain order in Comet. Figures are stored under the directory of the figure number. For Stampede2 server, generated csv files are under the $WORK/MatRox_RU/Figures/Fig7-scal/ directory. The user should copy csv files into a local machine with python and follow  instructions in lines 61-64 of matrox_knl.sh .
+The replicate_ppopp20.sh script installs MatRox, downloads datasets, generates graph data, and finally plot graphs. All steps are commented inside the script. 
+The instruction for plotting each graph separately is also available in the Figures folder for interested reviewers.  
 
 Similar trend should be visible in other architectures. General installation and running instructions are explained as following.  
 
-## Installation
+## 2. General Installation
 
 ### Software dependencies
 MatRox requires following dependencies:
