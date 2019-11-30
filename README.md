@@ -14,7 +14,7 @@ For Library codes, binaries are provided for all libraries, i.e., GOFMM, STRUMPA
 
  **Note to reviewers:** 
  * If you do not have access to XSEDE servers, we can provide temporary login information to XSEDE Comet and Stampede2 servers to ensure you can run all datasets conveniently. Please coordinate this through Hotcrp forum. 
- * Github does not reveal reviewers' identity, so using Github is encouraged. However, the zip file of the last version of the repository is also provided. 
+ * Github does not reveal reviewers' identity, so using Github is encouraged. You can find the repository from this [link](https://github.com/kobeliu85/MatRox_RU). However, the zip file of the last version of the repository is also provided. 
 
 To reproduce graphs on Hasewell which include figures 4, 5, 7 (upper part), 9, and 10:
 ```
