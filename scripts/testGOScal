@@ -1,4 +1,5 @@
 #!/bin/bash
+#SBATCH -A mit162
 #SBATCH --job-name="SC_code"
 #SBATCH --output="ml.%j.%N.out"
 #SBATCH --partition=compute

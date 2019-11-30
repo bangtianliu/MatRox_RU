@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -A ucb191
+#SBATCH -A mit162
 #SBATCH --job-name="PPoPP_artifact"
 #SBATCH --output="ppopp.%j.%N.out"
 #SBATCH --partition=compute
