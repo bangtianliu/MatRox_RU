@@ -13,8 +13,8 @@ To facilitate the replication of graphs of the PPoPP paper, two scripts are prov
 For Library codes, binaries are provided for all libraries, i.e., GOFMM, STRUMPACK, and SMASH. The source code and the driver code for GOFMM and STRUMPACK are included in the libTest folder as two separate zip files. The SMASH code is not public, so only its binary is provided. 
 
  **Note to reviewers:** 
- ..* If you do not have access to XSEDE servers, we can provide temporary login information to XSEDE Comet and Stampede2 servers to ensure you can run all datasets conveniently. Please coordinate this through Hotcrp forum. 
- ..* Github does not reveal reviewers' identity, so using Github is encouraged. However, the zip file of the last version of the repository is also provided. 
+ * If you do not have access to XSEDE servers, we can provide temporary login information to XSEDE Comet and Stampede2 servers to ensure you can run all datasets conveniently. Please coordinate this through Hotcrp forum. 
+ * Github does not reveal reviewers' identity, so using Github is encouraged. However, the zip file of the last version of the repository is also provided. 
 
 To reproduce graphs on Hasewell which include figures 4, 5, 7 (upper part), 9, and 10:
 ```
