@@ -61,6 +61,7 @@ export MKLROOT=/path/to/mkl/lib/
 
 To build the MatRox following steps have to be done:
 ```bash
+git clone https://github.com/kobeliu85/MatRox_RU.git 
 cd where/you/cloned/MatRox
 mkdir build
 cd build
