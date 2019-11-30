@@ -1,7 +1,7 @@
 # MatRox
 MatRox is a code generator for generating efficient parallel HMatrix-matrix multiplication code, built on top of [Sympiler](http://www.sympiler.com/).
 
-The Readme file is created in two sections, artifact for PPoPP'20 paper titled [MatRox: Modular approach for improving data locality in Hierarchical (Mat)rix App(Rox)imation](https://arxiv.org/pdf/1812.07152), and general instructions for installing MatRox in a generic architecture. 
+The Readme file is created in two sections, artifact for PPoPP'20 paper titled [MatRox: Modular approach for improving data locality in Hierarchical (Mat)rix App(Rox)imation](http://www.paramathic.com/wp-content/uploads/2019/11/matrox_PPOPP.pdf), and general instructions for installing MatRox in a generic architecture. 
 
 ## 1. PPOPP'20 Artifact Description
 ### Software and Hardware dependencies
