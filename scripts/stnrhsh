@@ -19,7 +19,7 @@ declare -a filearray=(
 #"../data/unit32000.points.bin"
 )
 
-
+module load gnu/6.2.0
 array=(16, 16, 129, 2)
 
 if [ -f "stoutput" ]; then
@@ -84,4 +84,3 @@ rm tstrhs1k.csv
 rm tstrhs2k.csv
 rm tstrhs4k.csv
 rm data.csv
-

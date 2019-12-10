@@ -20,6 +20,7 @@ declare -a filearray=(
 )
 
 
+module load gnu/6.2.0
 array=(16, 16, 129, 2)
 
 if [ -f stout ]; then
@@ -37,10 +38,10 @@ d=${array[$i]}
 echo "#dim=$d"
 
     export OMP_NUM_THREADS=1
-    $executable $filename $d 5 | tee -a stout 
-    
+    $executable $filename $d 5 | tee -a stout
+
     export OMP_NUM_THREADS=12
-    $executable $filename $d 5 | tee -a stout 
+    $executable $filename $d 5 | tee -a stout
 
 let i++
 done

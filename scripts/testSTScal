@@ -20,6 +20,7 @@ declare -a filearray=(
 )
 
 
+module load gnu/6.2.0
 #array=(16, 16, 129, 2)
 array=(2)
 
@@ -39,10 +40,10 @@ echo "#dim=$d"
 
   for j in {1..12}
   do
-    
+
     export OMP_NUM_THREADS=${j}
     $executable $filename $d 5 | tee -a stout
-  done 
+  done
 let i++
 done
 
