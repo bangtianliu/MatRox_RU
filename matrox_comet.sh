@@ -66,10 +66,10 @@ cp stnrhs.csv ../Figures/Fig4-nrhs/
 ## Figure 4-HSS
 cd ${MatRox_Fig}/Fig4-nrhs/
 
-python drawhssnrhs.py --m hssnrhs.csv --g gohssnrhs.csv --s stnrhs.csv
+python3 drawhssnrhs.py --m hssnrhs.csv --g gohssnrhs.csv --s stnrhs.csv
 
 ## Figure 4-H2b
-python drawh2bnrhs.py --m h2nrhs.csv --g goh2nrhs.csv
+python3 drawh2bnrhs.py --m h2nrhs.csv --g goh2nrhs.csv
 
 ##############################################
 
@@ -98,10 +98,10 @@ cp stflops.csv ../Figures/Fig5-flops/
 ## Figure 5-HSS
 cd ${MatRox_Fig}/Fig5-flops/
 
-python drawhssflops.py --m hssflops.csv --g gohssflops.csv --s stflops.csv
+python3 drawhssflops.py --m hssflops.csv --g gohssflops.csv --s stflops.csv
 
 ## Figure 5-H2b
-python drawh2bflops.py --m h2flops.csv --g goh2flops.csv
+python3 drawh2bflops.py --m h2flops.csv --g goh2flops.csv
 
 ##############################################
 
@@ -127,7 +127,7 @@ cp smascal.csv ../Figures/Fig7-scal/
 cd ${MatRox_Fig}/Fig7-scal/
 
 ## Figure 7-scalability on comet
-python drawscal.py --m scal.csv --g goscal.csv --s stscal.csv --sa smascal.csv
+python3 drawscal.py --m scal.csv --g goscal.csv --s stscal.csv --sa smascal.csv
 
 ##############################################
 
@@ -141,7 +141,7 @@ cp acc.csv ${MatRox_Fig}/Fig9-acc/
 
 ## Figure 9 accuracy
 cd ${MatRox_Fig}/Fig9-acc/
-python drawacc.py acc.csv
+python3 drawacc.py acc.csv
 
 ##############################################
 
@@ -159,6 +159,6 @@ bash GOnrunsh 0.03
 cp gonrun.csv ../Figures/Fig10-nrun/
 ## Figure 10-multiple runs
 cd ${MatRox_Fig}/Fig10-nrun/
-python drawnrun.py --m nrun.csv --g gonrun.csv
+python3 drawnrun.py --m nrun.csv --g gonrun.csv
 
 ##############################################
