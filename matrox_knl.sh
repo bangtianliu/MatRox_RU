@@ -21,7 +21,6 @@ MatRox_build=${MatRox_HOME}/build/sympiler/
 MatRox_Lib=${MatRox_HOME}/libTest/
 MatRox_Fig=${MatRox_HOME}/Figures/
 
-
 ### Installing MatRox
 mkdir build
 cd build
