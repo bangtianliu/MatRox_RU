@@ -16,10 +16,10 @@ cometORknl=$1
 fi
 
 if [ $cometORknl -eq 1 ]; then
-module load python
-module load scipy
 export MODULEPATH=/share/apps/compute/modulefiles:$MODULEPATH
 module load intel/2018.1.163
+module load python
+module load scipy/3.6
 export MKLROOT=/share/apps/compute/intel/intelmpi2018/compilers_and_libraries/linux/mkl/
 export CMAKE_CXX_COMPILER=/share/apps/compute/intel/intelmpi2018/compilers_and_libraries/linux/bin/intel64/icpc
 #export OMP=/share/apps/compute/intel/intelmpi2018/compilers_and_libraries/linux/lib/intel64/
