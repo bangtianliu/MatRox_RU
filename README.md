@@ -31,7 +31,7 @@ To replicate the scalability figure, i.e., lower part of figure 7, on a KNL node
 ssh username@stampede2.tacc.utexas.edu
 #enter the provided password 
 #enter the provided 6-digit code
-cd $WORK
+cd $HOME
 git clone https://github.com/kobeliu85/MatRox_RU.git 
 cd MatRox_RU
 bash replicate_ppopp20.sh 2
