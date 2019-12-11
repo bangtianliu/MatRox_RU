@@ -83,7 +83,7 @@ executable=./sympiler_proj
     #budget=${bg[$i]}
 
     #export OMP_NUM_THREADS=12;
-    budget=0.03
+    budget=0.02
     echo "#filename=$filename"
 
     #for j in {1..3}

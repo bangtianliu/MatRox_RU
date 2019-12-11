@@ -22,14 +22,12 @@ MatRox_Lib=${MatRox_HOME}/libTest/
 MatRox_Fig=${MatRox_HOME}/Figures/
 
 
-
 ### Installing MatRox
 mkdir build
 cd build
 cmake ..
 cd sympiler
 make
-
 
 cp ../../scripts/KNL/testScalKNL ./
 cp ../../scripts/KNL/* ${MatRox_Lib}/
