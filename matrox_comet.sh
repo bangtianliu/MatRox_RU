@@ -18,6 +18,7 @@ fi
 if [ $cometORknl -eq 1 ]; then
 export MODULEPATH=/share/apps/compute/modulefiles:$MODULEPATH
 module load intel/2018.1.163
+module load gnu/6.2.0
 module load python
 module load scipy/3.6
 export MKLROOT=/share/apps/compute/intel/intelmpi2018/compilers_and_libraries/linux/mkl/
